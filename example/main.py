@@ -1,15 +1,22 @@
 #!/usr/bin/env python3
 
-from collections.abc import Collection, Iterable
+# Example add problem.
+# Constraints:
+#   main: T <= 100, A <= 100, B <= 100
+#   bonus: T <= 1e5, A <= 1e12, B <= 1e12
+
 from typing import override
-from calico_lib import Problem, py_runner, TestFileBase, MulticaseTestFile
+from calico_lib import Problem, py_runner, TestFileBase, MulticaseTestFile, Subproblem
 import random
 
 from calico_lib.multicase import TestCaseBase
 
 p = Problem["TestFile"](
         'add',
-        test_sets=['main', 'bonus'])
+        test_sets=[
+            Subproblem('main', rank=1),
+            Subproblem('bonus', rank=2, time_limit=4, mem_limit=1_000_000_000),
+            ])
 
 class TestCase(TestCaseBase):
     def __init__(self, X: int, Y: int) -> None:
@@ -22,11 +29,13 @@ class TestCase(TestCaseBase):
         p.print_test(self.X, self.Y)
 
     def verify_case(self, test_sets):
-        assert 1 <= self.X <= 10000
+        assert 1 <= self.X <= 1e12
         if 'main' in test_sets:
             assert self.X <= 100
 
 solution = py_runner('submissions/accepted/add_arbitrary.py')
+validator1 = py_runner('scripts/validator_main.py')
+validator2 = py_runner('scripts/validator.py')
 
 class TestFile(MulticaseTestFile):
     problem = p
@@ -34,6 +43,9 @@ class TestFile(MulticaseTestFile):
     @override
     def validate_test_in(self, infile: str):
         """Verify the test using an external validator."""
+        if 'main' in self.subproblems:
+            validator1.exec_file(infile)
+        validator2.exec_file(infile)
 
         """Verify the test from test data (bad practice, prefer verifying the infile)."""
         total = 0
@@ -42,12 +54,13 @@ class TestFile(MulticaseTestFile):
             assert isinstance(case, TestCase)
             case.verify_case(self.subproblems)
             total += case.X + case.Y
-        assert total <= 1e6
+        assert total <= 1e15
 
     @override
     def write_test_out(self, infile: str):
         p.print_test(solution.exec_file(infile))
 
+# adds to all subproblems by default
 p.add_sample_test(TestFile([
     TestCase(4, 7),
     TestCase(1, 23),
@@ -55,21 +68,33 @@ p.add_sample_test(TestFile([
     TestCase(1, 1),
     ]))
 
-@p.hidden_test_generator(test_count=5, subproblems=['main', 'bonus'])
+cases = []
+for i in range(80):
+    cases.append(TestCase(i+1, 80-i))
+p.add_hidden_test(TestFile(cases), 'iota')
+    
+cases = []
+for i in range(100):
+    cases.append(TestCase(i+1, 10000-i))
+p.add_hidden_test(TestFile(cases), 'iota', ['bonus'])
+
+# more ways to add test cases
+@p.hidden_test_generator(test_count=4)
 def pure_random() -> TestFile:
     test = TestFile()
-    for i in range(100):
+    for i in range(10):
         test.cases.append(TestCase(random.randint(1, 100), random.randint(1, 100)))
     return test
 
-@p.hidden_test_generator(test_count=5, subproblems=['bonus'])
+@p.hidden_test_generator(test_count=4, subproblems=['bonus'])
 def pure_random2():
-    cases = (TestCase(random.randint(70, 10000), random.randint(70, 10000)) for _ in range(5))
+    cases = (TestCase(random.randint(70, int(1e12)), random.randint(70, int(1e12))) for _ in range(100))
     return TestFile(cases)
 
 def main():
     # p.run_cli()
     p.create_all_tests()
-    # p.create_zip()
+    p.create_zip()
 
-main()
+if __name__ == '__main__':
+    main()
