@@ -1,6 +1,6 @@
 def solve(N: int, M: int, G: list) -> int:
     """
-    
+    Return the minimum number of actions
     
     N: a non-negative integer representing the number of rows
     M: another non-negative integer representing the number of columns

@@ -3,15 +3,16 @@
 using namespace std;
 
 /**
- * Return the sum of A and B.
+ * Return the minimum number of actions
  *
- * A: a non-negative integer
- * B: another non-negative integer
+ * N: a non-negative integer representing the number of rows
+ * M: another non-negative integer representing the number of columns
+ * G: N x M array representing a grid
  */
 int solve(int N, int M, int G[][])
 {
     // YOUR CODE HERE
-    return "";
+    return -1;
 }
 
 int main()
