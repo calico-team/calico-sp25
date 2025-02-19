@@ -1,9 +1,10 @@
-def solve(A: int, B: int) -> int:
+def solve(N: int, M: int, G: list) -> int:
     """
-    Return the sum of A and B.
     
-    A: a non-negative integer
-    B: another non-negative integer
+    
+    N: a non-negative integer representing the number of rows
+    M: another non-negative integer representing the number of columns
+    G: N x M array representing a grid
     """
     # YOUR CODE HERE
     return 0
@@ -12,9 +13,10 @@ def solve(A: int, B: int) -> int:
 def main():
     T = int(input())
     for _ in range(T):
-        temp = input().split()
-        A, B = int(temp[0]), int(temp[1])
-        print(solve(A, B))
-
+        N, M = map(int, input().split())
+        G = []
+        for _ in range(N): 
+            row = list(map(int, input().split()))
+            G.append(row)      
 if __name__ == '__main__':
     main()

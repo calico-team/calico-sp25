@@ -7,7 +7,7 @@ class Solution {
      * A: a non-negative integer
      * B: another non-negative integer
      */
-    static int solve(int A, int B) {
+    static int solve(int N, int M, int[][] G) {
         // YOUR CODE HERE
         return -1;
     }
@@ -19,9 +19,19 @@ class Solution {
         int T = Integer.parseInt(in.readLine());
         for (int i = 0; i < T; i++) {
             String[] temp = in.readLine().split(" ");
-            int A = Integer.parseInt(temp[0]), B = Integer.parseInt(temp[1]);
-            out.println(solve(A, B));
+            int N = Integer.parseInt(temp[0]), M = Integer.parseInt(temp[1]);
+            int[][] G = new int[N][]
+            for (int j = 0; j < N; j++) {
+                temp = in.readLine().split(" ");
+                for (k = 0; k < temp.length(); k++) {
+                    G[j][k] = Integer.parseInt(temp[k]);
+                }
+            }
+            out.println(G)
+            out.println(solve(N, M, G));
         }
         out.flush();
     }
 }
+
+
