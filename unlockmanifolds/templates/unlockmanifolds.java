@@ -15,20 +15,19 @@ class Solution {
     
     static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     static PrintWriter out = new PrintWriter(System.out);
-
+    
     public static void main(String[] args) throws IOException {
         int T = Integer.parseInt(in.readLine());
         for (int i = 0; i < T; i++) {
             String[] temp = in.readLine().split(" ");
             int N = Integer.parseInt(temp[0]), M = Integer.parseInt(temp[1]);
-            int[][] G = new int[N][]
+            int[][] G = new int[N][M];
             for (int j = 0; j < N; j++) {
                 temp = in.readLine().split(" ");
-                for (k = 0; k < temp.length(); k++) {
+                for (int k = 0; k < M; k++) {
                     G[j][k] = Integer.parseInt(temp[k]);
                 }
             }
-            out.println(G)
             out.println(solve(N, M, G));
         }
         out.flush();

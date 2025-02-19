@@ -7,7 +7,7 @@ def solve(N: int, M: int, G: list) -> int:
     G: N x M array representing a grid
     """
     # YOUR CODE HERE
-    return 0
+    return -1
 
 
 def main():
@@ -15,8 +15,10 @@ def main():
     for _ in range(T):
         N, M = map(int, input().split())
         G = []
-        for _ in range(N): 
+        for _ in range(N):
             row = list(map(int, input().split()))
-            G.append(row)      
+            G.append(row)
+
+
 if __name__ == '__main__':
     main()
