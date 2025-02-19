@@ -18,6 +18,7 @@ def main():
         for _ in range(N):
             row = list(map(int, input().split()))
             G.append(row)
+        print(solve(N, M, G))
 
 
 if __name__ == '__main__':
