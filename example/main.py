@@ -7,6 +7,8 @@
 
 from typing import override
 from calico_lib import Problem, py_runner, TestFileBase, MulticaseTestFile, Subproblem
+from collections.abc import Collection, Iterable
+from typing import NamedTuple, override
 import random
 
 from calico_lib.multicase import TestCaseBase
@@ -18,27 +20,25 @@ p = Problem["TestFile"](
             Subproblem('bonus', rank=2, time_limit=4, mem_limit=1_000_000_000),
             ])
 
-class TestCase(TestCaseBase):
-    def __init__(self, X: int, Y: int) -> None:
-        self.X = X
-        self.Y = Y
-        super().__init__()
-
-    def write_test_in(self):
-        """Write the input file of this test case using print_test"""
-        p.print_test(self.X, self.Y)
-
-    def verify_case(self, test_sets):
-        assert 1 <= self.X <= 1e12
-        if 'main' in test_sets:
-            assert self.X <= 100
+class TestCase(NamedTuple):
+    X: int
+    Y: int
 
 solution = py_runner('submissions/accepted/add_arbitrary.py')
 validator1 = py_runner('scripts/validator_main.py')
 validator2 = py_runner('scripts/validator.py')
 
-class TestFile(MulticaseTestFile):
-    problem = p
+class TestFile(TestFileBase):
+    def __init__(self, cases: Iterable[TestCase]) -> None:
+        self.cases = list(cases)
+        super().__init__()
+
+    @override
+    def write_test_in(self):
+        """Write the input file of this test case using print_test"""
+        p.print_test(len(self.cases))
+        for case in self.cases:
+            p.print_test(case.X, case.Y)
 
     @override
     def validate_test_in(self, infile: str):
@@ -46,15 +46,6 @@ class TestFile(MulticaseTestFile):
         if 'main' in self.subproblems:
             validator1.exec_file(infile)
         validator2.exec_file(infile)
-
-        """Verify the test from test data (bad practice, prefer verifying the infile)."""
-        total = 0
-        assert 1 <= len(self.cases) <= 100, f"Got {len(self.cases)} cases"
-        for case in self.cases:
-            assert isinstance(case, TestCase)
-            case.verify_case(self.subproblems)
-            total += case.X + case.Y
-        assert total <= 1e15
 
     @override
     def write_test_out(self, infile: str):
@@ -71,17 +62,19 @@ p.add_sample_test(TestFile([
 cases = []
 for i in range(80):
     cases.append(TestCase(i+1, 80-i))
+
 p.add_hidden_test(TestFile(cases), 'iota')
     
 cases = []
 for i in range(100):
     cases.append(TestCase(i+1, 10000-i))
-p.add_hidden_test(TestFile(cases), 'iota', ['bonus'])
+
+p.add_hidden_test(TestFile(cases), 'iota', subproblems=['bonus'])
 
 # more ways to add test cases
 @p.hidden_test_generator(test_count=4)
 def pure_random() -> TestFile:
-    test = TestFile()
+    test = TestFile([])
     for i in range(10):
         test.cases.append(TestCase(random.randint(1, 100), random.randint(1, 100)))
     return test
