@@ -10,6 +10,8 @@ from calico_lib import Problem, py_runner, TestFileBase, Subproblem
 from collections.abc import Collection, Iterable
 from typing import NamedTuple, override
 import random
+import os
+os.chdir(os.path.dirname(__file__))
 
 p = Problem["TestFile"](
         'unlockmanifolds',
@@ -22,7 +24,7 @@ class TestCase(NamedTuple):
     M: int
     G: list
 
-solution = py_runner('unlockmanifolds/submissions/accepted/unlockmanifolds.py')
+solution = py_runner('submissions/accepted/unlockmanifolds.py')
 # validator1 = py_runner('scripts/validator_main.py')
 # validator2 = py_runner('scripts/validator.py')
 
@@ -67,26 +69,37 @@ p.add_sample_test(TestFile([
         [2, 4],
         [6, 8]
     ]),
+    TestCase(1, 8, [
+        [1, 2, 3, 4, 5, 6, 7, 8]
+    ]),
+    TestCase(1, 8, [
+        [1, 8, 7, 6, 5, 4, 3, 2]
+    ]),
+    TestCase(1, 1, [
+        [1]
+    ])
     ]))
 
 cases = []
 for i in range(10):
     N = random.randint(1, 200)
     M = random.randint(1, 200)
-    numbers = list(range(1, N * M))
+    numbers = list(range(1, N * M + 1))
     random.shuffle(numbers)
     G = []
     temp = []
     count = 0
     for num in numbers:
         temp.append(num)
+        count += 1
         if (count == M):
+            print()
             G.append(temp)
             temp = []
             count = 0
     cases.append(TestCase(N, M, G))
 
-p.add_hidden_test(TestFile(cases), 'secret_01_main_random.in')
+p.add_hidden_test(TestFile(cases), 'secret_01_main_random')
     
 #cases = []
 #for i in range(100):
