@@ -23,10 +23,10 @@ class Solution {
             }
         }
         for (int k = 1; k < (N * M) + 1; k++) {
-            actions += min((row.get(k) - cursor_row) % N, (cursor_row - row.get(k)) % N);
-            actions += min((col.get(k) - cursor_col) % M, (cursor_col - col.get(k)) % M);
-            row = row.get(k);
-            col = col.get(k);
+            actions += Math.min((row.get(k) - cursor_row) % N, (cursor_row - row.get(k)) % N);
+            actions += Math.min((col.get(k) - cursor_col) % M, (cursor_col - col.get(k)) % M);
+            cursor_row = row.get(k);
+            cursor_col = col.get(k);
         }
         return actions;
     }
