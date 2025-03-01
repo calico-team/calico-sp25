@@ -11,10 +11,12 @@ from collections.abc import Collection, Iterable
 from typing import NamedTuple, override
 import random
 import os
-os.chdir(os.path.dirname(__file__))
+
+problem_dir = os.path.dirname(__file__)
 
 p = Problem["TestFile"](
         'unlockmanifolds',
+        os.path.dirname(__file__),
         test_sets=[
             Subproblem('main', rank=2),
             ])
@@ -24,9 +26,9 @@ class TestCase(NamedTuple):
     M: int
     G: list
 
-solution = py_runner('submissions/accepted/unlockmanifolds.py')
-# validator1 = py_runner('scripts/validator_main.py')
-# validator2 = py_runner('scripts/validator.py')
+solution = py_runner(os.path.join(problem_dir, 'submissions/accepted/unlockmanifolds.py'))
+# validator1 = py_runner(os.path.join('scripts/validator_main.py'))
+# validator2 = py_runner(os.path.join('scripts/validator.py'))
 
 class TestFile(TestFileBase):
     def __init__(self, cases: Iterable[TestCase]) -> None:
@@ -54,7 +56,7 @@ class TestFile(TestFileBase):
 
     @override
     def write_test_out(self, infile: str):
-        p.print_test(solution.exec_file(infile))
+        p.print_test(solution.exec_file(infile), end='')
 
 # adds to all subproblems by default
 p.add_sample_test(TestFile([
@@ -93,7 +95,7 @@ for i in range(10):
         temp.append(num)
         count += 1
         if (count == M):
-            print()
+            # print()
             G.append(temp)
             temp = []
             count = 0
