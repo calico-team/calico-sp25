@@ -6,15 +6,19 @@
 #   bonus: T <= 1e5, A <= 1e12, B <= 1e12
 
 from typing import override
-from calico_lib import Problem, py_runner, TestFileBase, MulticaseTestFile, Subproblem
+from calico_lib import Problem, cpp_runner, py_runner, TestFileBase, MulticaseTestFile, Subproblem, Runner
 from collections.abc import Collection, Iterable
 from typing import NamedTuple, override
 import random
+import os
 
 from calico_lib.multicase import TestCaseBase
 
+problem_dir = os.path.dirname(__file__)
+
 p = Problem["TestFile"](
         'add',
+        problem_dir, # problem is in the same directory as the python source file
         test_sets=[
             Subproblem('main', rank=1),
             Subproblem('bonus', rank=2, time_limit=4, mem_limit=1_000_000_000),
@@ -24,9 +28,10 @@ class TestCase(NamedTuple):
     X: int
     Y: int
 
-solution = py_runner('submissions/accepted/add_arbitrary.py')
-validator1 = py_runner('scripts/validator_main.py')
-validator2 = py_runner('scripts/validator.py')
+solution = py_runner(os.path.join(problem_dir, 'submissions/accepted/add_arbitrary.py'))
+solution2 = cpp_runner(os.path.join(problem_dir, 'submissions/accepted/add_int.cpp'), 'add_int')
+validator1 = py_runner(os.path.join(problem_dir, 'scripts/validator_main.py'))
+validator2 = py_runner(os.path.join(problem_dir, 'scripts/validator.py'))
 
 class TestFile(TestFileBase):
     def __init__(self, cases: Iterable[TestCase]) -> None:
@@ -49,7 +54,7 @@ class TestFile(TestFileBase):
 
     @override
     def write_test_out(self, infile: str):
-        p.print_test(solution.exec_file(infile))
+        p.print_test(solution2.exec_file(infile))
 
 # adds to all subproblems by default
 p.add_sample_test(TestFile([
@@ -86,6 +91,13 @@ def pure_random2():
 
 def main():
     # p.run_cli()
+
+    # increase stack size for running solutions using heaving recursion
+    # import resource
+    # resource.setrlimit(resource.RLIMIT_STACK, (268435456, 268435456))
+
+    solution2.compile()
+    p.init_problem()
     p.create_all_tests()
     p.create_zip()
 
