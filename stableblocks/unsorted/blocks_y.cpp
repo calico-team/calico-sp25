@@ -212,7 +212,7 @@ int main()
 		return 1;
 	    }
 	}
-	
+
 	if (is_stable(blocks)) {
 	    std::cout << "Stable" << std::endl;
 	} else {
