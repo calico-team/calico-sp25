@@ -1,4 +1,9 @@
+#include <fstream>
+
 bool debug = true;
+
+int c = 0;
+std::ofstream f;
 
 void
 debug_begin()
@@ -6,7 +11,13 @@ debug_begin()
     if (!debug) {
 	return;
     }
-    std::cerr << "<svg>" << std::endl;
+
+    const std::string filename =
+	"blocks_" + std::to_string(c) + ".svg";
+    
+    f.open(filename.c_str());
+    
+    f << "<svg>" << std::endl;
 }
 
 void
@@ -15,7 +26,11 @@ debug_end()
     if (!debug) {
 	return;
     }
-    std::cerr << "</svg>" << std::endl;
+    f << "</svg>" << std::endl;
+
+    f.close();
+    
+    c++;
 }
 
 void
@@ -25,7 +40,7 @@ debug_block(const Block &block)
 	return;
     }
     
-    std::cerr
+    f
 	<< "    <polygon points=\""
 	<< 100 * block.lowerLeft.x << "," << -100 * block.lowerLeft.y << " "
 	<< 100 * block.lowerLeft.x << "," << -100 * block.upperRight.y << " "
@@ -41,7 +56,7 @@ debug_center(const double x, const double y, const bool instable)
 	return;
     }
 
-    std::cerr
+    f
 	<< "    <line "
 	<< "x1=\"" << (100.0 * x) << "\" "
 	<< "y1=\"" << (-100.0 * y) << "\" "
@@ -49,10 +64,10 @@ debug_center(const double x, const double y, const bool instable)
 	<< "y2=\"" << (-100.0 * y - 50.0) << "\" "
 	<< "style=\"stroke:";
     if (instable) {
-	std::cerr << "red;";
+	f << "red;";
     } else {
-	std::cerr << "green;";
+	f << "green;";
     }
-    std::cerr
+    f
 	<< "stroke-width:10\"/>" << std::endl;
 }
