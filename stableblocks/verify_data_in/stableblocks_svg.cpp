@@ -1,7 +1,15 @@
 #include <algorithm>
+#include <cstdint>
+#include <fstream>
 #include <iostream>
 #include <vector>
 
+struct Block;
+void debug_begin();
+void debug_end();
+void debug_block(const Block &block);
+void debug_center(const double x, const double y, const bool instable);
+    
 struct Corner
 {
     // Problem implies that y-Axis is going up with
@@ -43,8 +51,6 @@ struct Block
 
     double totalMassY = 0;
 };
-
-#include "debug.h"
 
 // {0, 1, ..., n - 1}
 std::vector<int> indices(const int n)
@@ -220,4 +226,59 @@ int main()
 	}
 	debug_end();
     }
+}
+
+int c = 0;
+std::ofstream f;
+
+void
+debug_begin()
+{
+    const std::string filename =
+	"blocks_" + std::to_string(c) + ".svg";
+    
+    f.open(filename.c_str());
+    
+    f << "<svg>" << std::endl;
+}
+
+void
+debug_end()
+{
+    f << "</svg>" << std::endl;
+
+    f.close();
+    
+    c++;
+}
+
+void
+debug_block(const Block &block)
+{
+    f
+	<< "    <polygon points=\""
+	<< 100 * block.lowerLeft.x << "," << -100 * block.lowerLeft.y << " "
+	<< 100 * block.lowerLeft.x << "," << -100 * block.upperRight.y << " "
+	<< 100 * block.upperRight.x << "," << -100 * block.upperRight.y << " "
+	<< 100 * block.upperRight.x << "," << -100 * block.lowerLeft.y << "\" "
+	<< "style=\"fill:none;stroke:black;stroke-width:5\"/>" << std::endl;
+}
+
+void
+debug_center(const double x, const double y, const bool instable)
+{
+    f
+	<< "    <line "
+	<< "x1=\"" << (100.0 * x) << "\" "
+	<< "y1=\"" << (-100.0 * y) << "\" "
+	<< "x2=\"" << (100.0 * x) << "\" "
+	<< "y2=\"" << (-100.0 * y - 50.0) << "\" "
+	<< "style=\"stroke:";
+    if (instable) {
+	f << "red;";
+    } else {
+	f << "green;";
+    }
+    f
+	<< "stroke-width:10\"/>" << std::endl;
 }
