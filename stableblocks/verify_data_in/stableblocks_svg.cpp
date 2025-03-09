@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cmath>
 #include <cstdint>
 #include <fstream>
 #include <iostream>
@@ -9,7 +10,7 @@ void debug_begin();
 void debug_end();
 void debug_block(const Block &block);
 void debug_center(const double x, const double y, const bool instable);
-    
+
 struct Corner
 {
     // Problem implies that y-Axis is going up with
@@ -144,6 +145,12 @@ bool is_stable(std::vector<Block> &blocks)
 	    }
 	}
 
+	if (!(fabs(center_x - below->lowerLeft.x) > 0.001 &&
+	       fabs(center_x - below->upperRight.x) > 0.001)) {
+	    std::cerr << "Center of mass ambiguous" << std::endl;
+	    exit(1);
+	}
+
 	// Make sure that the center of mass of this block lies
 	// between the left and right edge of the block below.
 	if (center_x < below->lowerLeft.x ||
@@ -236,9 +243,9 @@ debug_begin()
 {
     const std::string filename =
 	"blocks_" + std::to_string(c) + ".svg";
-    
+
     f.open(filename.c_str());
-    
+
     f << "<svg>" << std::endl;
 }
 
@@ -248,7 +255,7 @@ debug_end()
     f << "</svg>" << std::endl;
 
     f.close();
-    
+
     c++;
 }
 
