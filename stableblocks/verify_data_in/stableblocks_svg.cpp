@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <cstdint>
 
 struct Block;
 void debug_begin();
