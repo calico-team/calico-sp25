@@ -229,7 +229,7 @@ int main()
 	if (is_stable(blocks)) {
 	    std::cout << "Stable" << std::endl;
 	} else {
-	    std::cout << "UNSTABLE" << std::endl;
+	    std::cout << "Unstable" << std::endl;
 	}
 	debug_end();
     }
