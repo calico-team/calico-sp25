@@ -11,6 +11,8 @@ if __name__ == '__main__':
 
     line_no = 0
 
+    total_mass = 0
+
     m = pos_int_re.match(lines[line_no])
     if not m:
         raise Exception("Bad line %d" % line_no)
@@ -23,8 +25,6 @@ if __name__ == '__main__':
             raise Exception("Bad line %d" % line_no)
         line_no += 1
         N = int(m.group(0))
-
-        total_mass = 0
 
         for j in range(N):
             m = block_re.match(lines[line_no])
@@ -44,8 +44,8 @@ if __name__ == '__main__':
                 raise Exception("Not x0 < 10000")
             total_mass += (x1 - x0) * (y1 - y0)
 
-        if not total_mass < 100000:
-            raise Exception("Not total_mass < 100000")
+    if not total_mass < 100000:
+        raise Exception("Not total_mass = %d < 100000" % total_mass)
 
     if lines[line_no] != '':
         raise Exception("Not ending with new line")

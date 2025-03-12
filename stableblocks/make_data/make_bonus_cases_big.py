@@ -5,7 +5,7 @@ def make_blocks_for_case():
 
     blocks_lists = [[] for i in range(num_stacks)]
 
-    for j in range(95000):
+    for j in range(45000):
         k = random.randint(0, num_stacks - 1)
         h = len(blocks_lists[k])
         blocks_lists[k].append(
@@ -23,7 +23,7 @@ def make_blocks_for_case():
     return blocks
 
 # Num tests
-T = 100
+T = 2
 
 print("%d" % T)
 for i in range(T):

@@ -21,6 +21,8 @@ main_verified: stableblocks_verify_full_binary_tree
 bonus_verified: stableblocks_verify_forest
 	python stableblocks_verify_constraints.py ../data/secret/bonus.in
 	./stableblocks_verify_forest < ../data/secret/bonus.in
+	python stableblocks_verify_constraints.py ../data/secret/bonus_big.in
+	./stableblocks_verify_forest < ../data/secret/bonus_big.in
 
 stableblocks_svg: stableblocks_svg.cpp
 	g++ -std=c++17 -o stableblocks_svg stableblocks_svg.cpp
