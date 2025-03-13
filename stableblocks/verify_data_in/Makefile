@@ -14,8 +14,10 @@ stableblocks_verify_forest: stableblocks_verify_forest.cpp
 # 1. Check format, x and y coordinates and total mass.
 # 2. Check boxes non-overlapping and topology.
 main_verified: stableblocks_verify_full_binary_tree
-	python stableblocks_verify_constraints.py ../data/secret/main.in
-	./stableblocks_verify_full_binary_tree < ../data/secret/main.in
+	python stableblocks_verify_constraints.py ../data/secret/main_1.in
+	./stableblocks_verify_full_binary_tree < ../data/secret/main_1.in
+	python stableblocks_verify_constraints.py ../data/secret/main_2.in
+	./stableblocks_verify_full_binary_tree < ../data/secret/main_2.in
 
 # Same
 bonus_verified: stableblocks_verify_forest

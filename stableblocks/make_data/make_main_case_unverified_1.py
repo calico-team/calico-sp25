@@ -1,15 +1,7 @@
 import sys
 import random
 
-x_size = 200
-x_dither = 1
-y_dither = 40
-num_levels = 4
-
-shift = 0.5
-probability = 0.0
-
-def add_layer(blocks):
+def add_layer(blocks, probability, shift, x_dither, y_dither):
     new_blocks = []
     
     for x0, y0, x1, y1 in blocks:
@@ -37,14 +29,27 @@ def add_layer(blocks):
 
     return new_blocks
 
-blocks = [(-x_size, 0, x_size, 10)]
-all_blocks = blocks
-for i in range(num_levels):
-    blocks = add_layer(blocks)
-    all_blocks += blocks
+def make_test(x_size, x_dither, y_dither, num_levels, shift, probability, l = 10):
+    blocks = [(-x_size, 0, x_size, l)]
+    all_blocks = blocks
+    for i in range(num_levels):
+        blocks = add_layer(blocks, probability, shift, x_dither, y_dither)
+        all_blocks += blocks
 
-print(len(all_blocks))
-for x0, y0, x1, y1 in all_blocks:
-    print(x0, y0, x1, y1)
+    print(len(all_blocks))
+    for block in all_blocks:
+        print(' '.join('%d' % c for c in block))
 
-      
+random.seed(423426345)
+        
+print("9")
+make_test(200, 1, 40, 4, 0.5, 0.5)
+make_test(400, 1, 10, 5, 0.5, 0.01, 12)
+make_test(100, 1, 40, 3, 0.15, 0.01)
+make_test(1800, 1, 2, 6, 0.2, 0.04, 1)
+make_test(1700, 1, 2, 6, 0.3, 0.04, 1)
+make_test(100, 1, 10, 3, 0.15, 0.01)
+make_test(100, 1, 10, 3, 0.15, 0.01)
+make_test(100, 1, 10, 3, 0.15, 0.01)
+make_test(400, 1, 10, 5, 0.5, 0.03, 12)
+
