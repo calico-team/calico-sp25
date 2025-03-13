@@ -2,12 +2,11 @@ import java.io.*;
 
 class Solution {
     /**
-     * Return the sum of A and B.
-     * 
-     * A: a non-negative integer
-     * B: another non-negative integer
+     * Return the total money Big Ben pays
+     *
+     * L: list of characters representing the people Big Ben talks to
      */
-    static int solve(int A, int B) {
+    static int solve(String[] L) {
         // YOUR CODE HERE
         return -1;
     }
@@ -18,9 +17,8 @@ class Solution {
     public static void main(String[] args) throws IOException {
         int T = Integer.parseInt(in.readLine());
         for (int i = 0; i < T; i++) {
-            String[] temp = in.readLine().split(" ");
-            int A = Integer.parseInt(temp[0]), B = Integer.parseInt(temp[1]);
-            out.println(solve(A, B));
+            String[] L = in.readLine().split(" ");
+            out.println(solve(L));
         }
         out.flush();
     }
