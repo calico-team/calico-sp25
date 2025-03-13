@@ -22,6 +22,8 @@ def make_blocks_for_case():
 
     return blocks
 
+random.seed(2340435)
+
 # Num tests
 T = 2
 
