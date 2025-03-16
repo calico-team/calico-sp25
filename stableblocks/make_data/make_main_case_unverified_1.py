@@ -43,13 +43,13 @@ def make_test(x_size, x_dither, y_dither, num_levels, shift, probability, l = 10
 random.seed(423426345)
         
 print("9")
-make_test(200, 1, 40, 4, 0.5, 0.5)
-make_test(400, 1, 10, 5, 0.5, 0.01, 12)
+make_test(200, 1, 40, 4, 0.7, 0.5)
+make_test(400, 1, 10, 5, 0.8, 0.01, 12)
 make_test(100, 1, 40, 3, 0.15, 0.01)
 make_test(1800, 1, 2, 6, 0.2, 0.04, 1)
 make_test(1700, 1, 2, 6, 0.3, 0.04, 1)
 make_test(100, 1, 10, 3, 0.15, 0.01)
 make_test(100, 1, 10, 3, 0.15, 0.01)
 make_test(100, 1, 10, 3, 0.15, 0.01)
-make_test(400, 1, 10, 5, 0.5, 0.03, 12)
+make_test(400, 1, 10, 5, 0.7, 0.03, 12)
 

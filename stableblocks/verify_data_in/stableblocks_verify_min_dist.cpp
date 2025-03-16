@@ -1,15 +1,11 @@
+// Check that the center of mass is not close to the left or right edge of the block below
+// so that numerical issues could give the wrong result.
+
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
-#include <fstream>
 #include <iostream>
 #include <vector>
-
-struct Block;
-void debug_begin();
-void debug_end();
-void debug_block(const Block &block);
-void debug_center(const double x, const double y, const bool instable);
 
 struct Corner
 {
@@ -63,10 +59,9 @@ std::vector<int> indices(const int n)
     return result;
 }
 
-bool is_stable(std::vector<Block> &blocks)
+
+bool is_center_of_mass_ambiguous(std::vector<Block> &blocks)
 {
-    bool result = true;
-    
     // We want to process the blocks from top to bottom, left to
     // to right (by their lower left corner).
     std::sort(blocks.begin(), blocks.end(),
@@ -149,19 +144,7 @@ bool is_stable(std::vector<Block> &blocks)
 
 	if (!(fabs(center_x - below->lowerLeft.x) > 0.001 &&
 	       fabs(center_x - below->upperRight.x) > 0.001)) {
-	    std::cerr << "Center of mass ambiguous" << std::endl;
-	}
-
-	// Make sure that the center of mass of this block lies
-	// between the left and right edge of the block below.
-	if (center_x < below->lowerLeft.x ||
-	    center_x > below->upperRight.x) {
-
-	    debug_center(center_x, center_y, true);
-
-	    result = false;
-	} else {
-	    debug_center(center_x, center_y, false);
+	    return false;
 	}
 
 	// Accumulate torque and mass.
@@ -170,7 +153,7 @@ bool is_stable(std::vector<Block> &blocks)
 	below->totalMass += block.totalMass;
     }
 
-    return result;
+    return true;
 }
 
 int main()
@@ -179,8 +162,6 @@ int main()
     std::cin >> numCases;
 
     for (int i = 0; i < numCases; i++) {
-	debug_begin();
-
 	int numBlocks;
 	std::cin >> numBlocks;
 
@@ -191,102 +172,12 @@ int main()
 	    Block block;
 	    std::cin >> block.lowerLeft.x >> block.lowerLeft.y
 		     >> block.upperRight.x >> block.upperRight.y;
-	    debug_block(block);
 	    blocks.push_back(std::move(block));
 	}
 
-	uint64_t totalMass = 0;
-	for (const Block &block : blocks) {
-	    if (!(block.lowerLeft.x < block.upperRight.x)) {
-		std::cout << "Bad x" << std::endl;
-		return 1;
-	    }
-	    if (!(block.lowerLeft.y < block.upperRight.y)) {
-		std::cout << "Bad y" << std::endl;
-		return 1;
-	    }
-	    if (block.lowerLeft.x < -10000) {
-		std::cout << "Too negative x" << std::endl;
-		return 1;
-	    }
-	    if (block.upperRight.x > 10000) {
-		std::cout << "Too positive x" << std::endl;
-		return 1;
-	    }
-	    const uint64_t mass =
-		(block.upperRight.x - block.lowerLeft.x) *
-		(block.upperRight.y - block.lowerLeft.y);
-	    if (mass > 100000) {
-		std::cout << "Too large individual mass" << std::endl;
-		return 1;
-	    }
-	    totalMass += mass;
-	    if (totalMass > 100000) {
-		std::cout << "Too large total mass" << std::endl;
-		return 1;
-	    }
+	if (!is_center_of_mass_ambiguous(blocks)) {
+	    std::cout << "CENTER OF MASS AMBIGUOUS " << i << std::endl;
+	    return 1;
 	}
-
-	if (is_stable(blocks)) {
-	    std::cout << "Stable" << std::endl;
-	} else {
-	    std::cout << "Unstable" << std::endl;
-	}
-	debug_end();
     }
-}
-
-int c = 0;
-std::ofstream f;
-
-void
-debug_begin()
-{
-    const std::string filename =
-	"blocks_" + std::to_string(c) + ".svg";
-
-    f.open(filename.c_str());
-
-    f << "<svg>" << std::endl;
-}
-
-void
-debug_end()
-{
-    f << "</svg>" << std::endl;
-
-    f.close();
-
-    c++;
-}
-
-void
-debug_block(const Block &block)
-{
-    f
-	<< "    <polygon points=\""
-	<< 100 * block.lowerLeft.x << "," << -100 * block.lowerLeft.y << " "
-	<< 100 * block.lowerLeft.x << "," << -100 * block.upperRight.y << " "
-	<< 100 * block.upperRight.x << "," << -100 * block.upperRight.y << " "
-	<< 100 * block.upperRight.x << "," << -100 * block.lowerLeft.y << "\" "
-	<< "style=\"fill:none;stroke:black;stroke-width:5\"/>" << std::endl;
-}
-
-void
-debug_center(const double x, const double y, const bool instable)
-{
-    f
-	<< "    <line "
-	<< "x1=\"" << (100.0 * x) << "\" "
-	<< "y1=\"" << (-100.0 * y) << "\" "
-	<< "x2=\"" << (100.0 * x) << "\" "
-	<< "y2=\"" << (-100.0 * y - 50.0) << "\" "
-	<< "style=\"stroke:";
-    if (instable) {
-	f << "red;";
-    } else {
-	f << "green;";
-    }
-    f
-	<< "stroke-width:10\"/>" << std::endl;
 }

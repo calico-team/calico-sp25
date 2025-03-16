@@ -16,14 +16,16 @@ struct Block
 
 bool is_full_binary_tree(const std::vector<Block> &blocks)
 {
-    std::map<std::pair<int, int>, int> pointToBlockIndex;
+    // Maps square [x, x+1] x [y, y+1] to index of block
+    std::map<std::pair<int, int>, int> squareToBlockIndex;
     std::vector<std::set<int>> blocksToBlocksItIsRestingOn(blocks.size());
     std::vector<std::set<int>> blocksToBlocksRestingOnIt(blocks.size());
 
     for (int i = 0; i < blocks.size(); ++i) {
 	for (int x = blocks[i].lowerLeft.x; x < blocks[i].upperRight.x; ++x) {
 	    for (int y = blocks[i].lowerLeft.y; y < blocks[i].upperRight.y; ++y) {
-		if (!pointToBlockIndex.insert({{x,y}, i}).second) {
+		if (!squareToBlockIndex.insert({{x,y}, i}).second) {
+		    // Square is covered by two blocks!
 		    return false;
 		}
 	    }
@@ -32,41 +34,129 @@ bool is_full_binary_tree(const std::vector<Block> &blocks)
 
     for (int i = 0; i < blocks.size(); ++i) {
 	for (int y = blocks[i].lowerLeft.y; y < blocks[i].upperRight.y; ++y) {
-	    if (pointToBlockIndex.find({blocks[i].lowerLeft.x - 1, y}) != pointToBlockIndex.end()) {
+	    if (squareToBlockIndex.find({blocks[i].lowerLeft.x - 1, y}) != squareToBlockIndex.end()) {
+		// There is a block touching the left edge of this block.
 		return false;
 	    }
-	    if (pointToBlockIndex.find({blocks[i].upperRight.x, y}) != pointToBlockIndex.end()) {
+	    if (squareToBlockIndex.find({blocks[i].upperRight.x, y}) != squareToBlockIndex.end()) {
+		// There is a block touching the right edge of this block.
 		return false;
 	    }
 	}
+	{
+	    // Guard against lower left corner.
+	    //
+	    // That is, detect whether we are in the following situation:
+	    //
+	    //    ****
+	    //    *  *
+	    //    *  *
+	    // *******
+	    // *  *
+	    // *  *
+	    // ****
+	    //
+	    const auto it = squareToBlockIndex.find({blocks[i].lowerLeft.x - 1, blocks[i].lowerLeft.y - 1});
+	    if (it != squareToBlockIndex.end()) {
+		// We have another block covering the square that is touching the lower left corner in a vertex.
+		// We need to make sure that we have the following situation:
+		//
+		//   ****
+		//   *  *
+		//   *  *
+		// ******
+		// *  *
+		// *  *
+		// ****
+		//
+		// That is, the square under lower left corner of this block is covered by the same block.
+		const auto it2 = squareToBlockIndex.find({blocks[i].lowerLeft.x, blocks[i].lowerLeft.y - 1});
+		if (it2 == squareToBlockIndex.end()) {
+		    return false;
+		}
+		if (it->second != it2->second) {
+		    return false;
+		}
+	    }
+	}
+	{
+	    // Guard against upper left corner.
+	    const auto it = squareToBlockIndex.find({blocks[i].lowerLeft.x - 1, blocks[i].upperRight.y});
+	    if (it != squareToBlockIndex.end()) {
+		const auto it2 = squareToBlockIndex.find({blocks[i].lowerLeft.x, blocks[i].upperRight.y});
+		if (it2 == squareToBlockIndex.end()) {
+		    return false;
+		}
+		if (it->second != it2->second) {
+		    return false;
+		}
+	    }
+	}
+	{
+	    // Guard against lower right corner.
+	    const auto it = squareToBlockIndex.find({blocks[i].upperRight.x, blocks[i].lowerLeft.y - 1});
+	    if (it != squareToBlockIndex.end()) {
+		const auto it2 = squareToBlockIndex.find({blocks[i].upperRight.x - 1, blocks[i].lowerLeft.y - 1});
+		if (it2 == squareToBlockIndex.end()) {
+		    return false;
+		}
+		if (it->second != it2->second) {
+		    return false;
+		}
+	    }
+	}
+	{
+	    // Guard against upper right corner.
+	    const auto it = squareToBlockIndex.find({blocks[i].upperRight.x, blocks[i].upperRight.y});
+	    if (it != squareToBlockIndex.end()) {
+		const auto it2 = squareToBlockIndex.find({blocks[i].upperRight.x - 1, blocks[i].upperRight.y});
+		if (it2 == squareToBlockIndex.end()) {
+		    return false;
+		}
+		if (it->second != it2->second) {
+		    return false;
+		}
+	    }
+	}
+
+	// Finally, record the topology.
 	for (int x = blocks[i].lowerLeft.x; x < blocks[i].upperRight.x; ++x) {
 	    {
-		const auto it = pointToBlockIndex.find({x, blocks[i].lowerLeft.y - 1});
-		if (it != pointToBlockIndex.end()) {
+		const auto it = squareToBlockIndex.find({x, blocks[i].lowerLeft.y - 1});
+		if (it != squareToBlockIndex.end()) {
 		    blocksToBlocksItIsRestingOn[i].insert(it->second);
 		}
 	    }
 	    {
-		const auto it = pointToBlockIndex.find({x, blocks[i].upperRight.y});
-		if (it != pointToBlockIndex.end()) {
+		const auto it = squareToBlockIndex.find({x, blocks[i].upperRight.y});
+		if (it != squareToBlockIndex.end()) {
 		    blocksToBlocksRestingOnIt[i].insert(it->second);
 		}
 	    }
 	}
     }
 
+    // Verify topology.
     for (int i = 0; i < blocks.size(); i++) {
 	const int n = blocksToBlocksItIsRestingOn[i].size();
 	if (n == 0) {
+	    // Either resting on floor.
 	    if (blocks[i].lowerLeft.y != 0) {
 		return false;
 	    }
 	}
 	if (n > 1) {
+	    // Not resting on exactly one block: fail.
 	    return false;
 	}
     }
 
+    // Verify it has size of full binary tree.
+    if (blocks.size() & (blocks.size() + 1)) {
+	return false;
+    }
+
+    // Verify binary tree.
     for (int i = 0; i < blocks.size(); i++) {
 	const std::set<int> &blocksRestingOnIt = blocksToBlocksRestingOnIt[i];
 	if (i < blocks.size() / 2) {
@@ -78,10 +168,6 @@ bool is_full_binary_tree(const std::vector<Block> &blocks)
 		return false;
 	    }
 	}
-    }
-
-    if (blocks.size() & (blocks.size() + 1)) {
-	return false;
     }
 
     return true;
