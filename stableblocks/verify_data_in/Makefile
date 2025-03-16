@@ -17,24 +17,24 @@ stableblocks_verify_min_dist: stableblocks_verify_min_dist.cpp
 # 1. Check format, x and y coordinates and total mass.
 # 2. Check boxes non-overlapping and topology.
 main_verified: stableblocks_verify_full_binary_tree stableblocks_verify_min_dist
-	python stableblocks_verify_constraints.py ../data/secret/main_1.in
-	./stableblocks_verify_full_binary_tree < ../data/secret/main_1.in
-	./stableblocks_verify_min_dist < ../data/secret/main_1.in
-	python stableblocks_verify_constraints.py ../data/secret/main_2.in
-	./stableblocks_verify_full_binary_tree < ../data/secret/main_2.in
-	./stableblocks_verify_min_dist < ../data/secret/main_2.in
+	python stableblocks_verify_constraints.py ../data/secret/main.in
+	./stableblocks_verify_full_binary_tree < ../data/secret/main.in
+	./stableblocks_verify_min_dist < ../data/secret/main.in
+	python stableblocks_verify_constraints.py ../data/secret/main_curated.in
+	./stableblocks_verify_full_binary_tree < ../data/secret/main_curated.in
+	./stableblocks_verify_min_dist < ../data/secret/main_curated.in
 
 # Same
 bonus_verified: stableblocks_verify_forest stableblocks_verify_min_dist
 	python stableblocks_verify_constraints.py ../data/secret/bonus.in
 	./stableblocks_verify_forest < ../data/secret/bonus.in
 	./stableblocks_verify_min_dist < ../data/secret/bonus.in
-	python stableblocks_verify_constraints.py ../data/secret/bonus_big.in
-	./stableblocks_verify_forest < ../data/secret/bonus_big.in
-	./stableblocks_verify_min_dist < ../data/secret/bonus_big.in
+	python stableblocks_verify_constraints.py ../data/secret/bonus_curated.in
+	./stableblocks_verify_forest < ../data/secret/bonus_curated.in
+	./stableblocks_verify_min_dist < ../data/secret/bonus_curated.in
 
 stableblocks_svg: stableblocks_svg.cpp
 	g++ -std=c++17 -o stableblocks_svg stableblocks_svg.cpp
 
 clean:
-	rm -f stableblocks_verify_full_binary_tree stableblocks_verify_forest stableblocks_svg
+	rm -f stableblocks_verify_full_binary_tree stableblocks_verify_forest stableblocks_svg stableblocks_verify_min_dist
