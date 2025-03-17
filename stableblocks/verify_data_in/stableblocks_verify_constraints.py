@@ -17,8 +17,11 @@ if __name__ == '__main__':
     line_no += 1
     T = int(m.group(0))
 
-    if not T < 100:
+    if not T <= 100:
         raise Exception("Too many test cases %d" % T)
+
+    if not T >= 1:
+        raise Exception("Not enough test cases %d" % T)
 
     total_blocks = 0
 
