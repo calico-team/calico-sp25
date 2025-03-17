@@ -3,47 +3,57 @@ from collections import deque
 MOD = 1000000007
 
 class AhoCorasick:
+
     class Node:
         def __init__(self):
             self.to = [-1,-1]
             self.link = -1
-            self.endsHere = []
+            self.ends_here = 0
             self.end = False
             self.terminal = 0
-        
+
     def __init__(self):
         self.d = [self.Node()]
-        self.bfs = []
 
-    def ins(self, s, i):
+    
+    def insert(self, s, i):
         v = 0
         for C in s:
-            c = 0 if C == 'W' else 1
+            c = 1 if C == 'L' else 0
             if self.d[v].to[c] == -1:
                 self.d[v].to[c] = len(self.d)
+                self.d.append(self.Node())
             v = self.d[v].to[c]
         self.d[v].end = True
-        self.d[v].endsHere.append((i, len(s)))
-
+        self.d[v].ends_here += 1
+    
     def push_links(self):
         self.d[0].link = -1
         q = deque()
+        q.append(0)
         while q:
             v = q.popleft()
-            self.bfs.append(v)
-            self.d[v].terminal = 0 if self.d[v].link == -1 else self.d[v].link if self.d[self.d[v].link].end else self.d[self.d[v].link].terminal
-            for x in self.d[self.d[v].terminal].endsHere:
-                self.d[v].endsHere.append(x)
-            for c in range(2):
-                u = self.d[v].to[c]
-                if u == 0:
+            if self.d[v].link == -1:
+                self.d[v].terminal = 0
+            elif self.d[self.d[v].link].end:
+                self.d[v].terminal = self.d[v].link
+            else:
+                self.d[v].terminal = self.d[self.d[v].link].terminal
+            self.d[v].ends_here += self.d[self.d[v].terminal].ends_here
+            
+            for i in range(2):
+                u = self.d[v].to[i]
+                if u == -1:
                     continue
-                self.d[u].link = 0 if self.d[v].link == -1 else self.d[self.d[v].link].to[c]
+                self.d[u].link = 0 if self.d[v].link == -1 else self.d[self.d[v].link].to[i]
                 q.append(u)
+            
             if v != 0:
-                for c in range(2):
-                    if self.d[v].to[c] != 0:
-                        self.d[v].to[c] = self.d[self.d[v].link].to[c]
+                for i in range(2):
+                    if self.d[v].to[i] == -1:
+                        self.d[v].to[i] = self.d[self.d[v].link].to[i]
+
+
 
 
 def matMul(A, B):
@@ -72,7 +82,7 @@ def matPow(A, b):
     return res
     
 
-def solve(N: int, K: int, X: int, W1: int, W2: int, L1: int, L2: int, S: list[str]) -> int:
+def solve(N: int, K: int, X: int, Y: int, W1: int, W2: int, L1: int, L2: int, S: list[str]) -> int:
 
     # Transform the chances to Fp
     W1 *= pow(W2, MOD - 2, MOD)
@@ -83,7 +93,7 @@ def solve(N: int, K: int, X: int, W1: int, W2: int, L1: int, L2: int, S: list[st
     AC = AhoCorasick()
 
     for i in range(len(S)):
-        AC.ins(S[i], i)
+        AC.insert(S[i], i)
     
     AC.push_links()
 
@@ -94,7 +104,7 @@ def solve(N: int, K: int, X: int, W1: int, W2: int, L1: int, L2: int, S: list[st
     
     for i in range(num_states):
         j_win = AC.d[i].to[0]
-        swap_win = len(AC.d[j_win].endsHere) % 2 == 1
+        swap_win = AC.d[j_win].ends_here % 2 == 1
         if swap_win:
             A[i][j_win + num_states] = W1
             A[i + num_states][j_win] = L1
@@ -103,7 +113,7 @@ def solve(N: int, K: int, X: int, W1: int, W2: int, L1: int, L2: int, S: list[st
             A[i + num_states][j_win + num_states] = L1
         
         j_lose = AC.d[i].to[1]
-        swap_lose = len(AC.d[j_lose].endsHere) % 2 == 1
+        swap_lose = AC.d[j_lose].ends_here % 2 == 1
         if swap_lose:
             A[i][j_lose + num_states] = MOD - W1
             A[i + num_states][j_lose] = MOD - L1
@@ -112,15 +122,14 @@ def solve(N: int, K: int, X: int, W1: int, W2: int, L1: int, L2: int, S: list[st
             A[i + num_states][j_lose + num_states] = MOD - L2
     
     d0 = [[0 if i != 0 else 1 for i in range(2 * num_states)]]
-    mu = [[X * (2 * W1 - MOD) if i < num_states else X * (2 * L1 - MOD)] for i in range(2 * num_states)]
+    mu = [[X * W1 - Y * (MOD - W1) if i < num_states else X * L1 - Y * (MOD - L1)] for i in range(2 * num_states)]
     for v in mu:
-        if v[0] < 0:
-            v[0] += MOD
+        v[0] = (v[0] % MOD + MOD) % MOD
     
     # Returns sum from i = 1 to n of A^i
     def fun(n):
         if n == 1:
-            return eye(len(A))
+            return A
         elif n % 2 == 1:
             return matSum(matPow(A, n), fun(n - 1))
         else:
@@ -129,12 +138,14 @@ def solve(N: int, K: int, X: int, W1: int, W2: int, L1: int, L2: int, S: list[st
     return matMul(d0, matMul(matSum(eye(len(A)), fun(N - 1)), mu))[0][0]
 
 
+
 def main():
     T = int(input())
     for _ in range(T):
-        N, K, W1, W2, L1, L2 = map(int, list(input().split()))
+        N, K = map(int, list(input().split()))
+        X, Y, W1, W2, L1, L2 = map(int, list(input().split()))
         S = [input() for _ in range(K)]
-        print(solve(N, K, W1, W2, L1, L2, S))
+        print(solve(N, K, X, Y, W1, W2, L1, L2, S))
 
 if __name__ == '__main__':
     main()

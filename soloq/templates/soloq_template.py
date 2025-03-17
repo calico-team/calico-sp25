@@ -1,6 +1,6 @@
 MOD = 1000000007
 
-def solve(N: int, K: int, X: int, W1: int, W2: int, L1: int, L2: int, S: list[str]) -> int:
+def solve(N: int, K: int, X: int, Y: int, W1: int, W2: int, L1: int, L2: int, S: list[str]) -> int:
     """
     Return the sum of A and B.
     
@@ -14,9 +14,10 @@ def solve(N: int, K: int, X: int, W1: int, W2: int, L1: int, L2: int, S: list[st
 def main():
     T = int(input())
     for _ in range(T):
-        N, K, X, W1, W2, L1, L2 = map(int, list(input().split()))
+        N, K = map(int, list(input().split()))
+        X, Y, W1, W2, L1, L2 = map(int, list(input().split()))
         S = [input() for _ in range(K)]
-        print(solve(N, K, X, W1, W2, L1, L2, S))
+        print(solve(N, K, X, Y, W1, W2, L1, L2, S))
 
 if __name__ == '__main__':
     main()
