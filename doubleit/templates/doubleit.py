@@ -1,4 +1,4 @@
-def solve(P: str) -> int:
+def solve(L: int, P: str) -> int:
     """
     Return the total money Big Ben pays
     
@@ -11,8 +11,9 @@ def solve(P: str) -> int:
 def main():
     T = int(input())
     for _ in range(T):
+        L = input()
         P = input().split()
-        print(solve(P))
+        print(solve(L, P))
 
 if __name__ == '__main__':
     main()

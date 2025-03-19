@@ -1,4 +1,4 @@
-def solve(P: str) -> int:
+def solve(L: int, P: str) -> int:
     '''
     Implements addition with Python's arbitary precision arithmetic.
     '''
@@ -16,8 +16,9 @@ def solve(P: str) -> int:
 def main():
     T = int(input())
     for _ in range(T):
-        P = input()
-        print(solve(P))
+        L = input()
+        P = input().split()
+        print(solve(L, P))
 
 
 if __name__ == '__main__':

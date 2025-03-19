@@ -58,17 +58,20 @@ p.add_sample_test(TestFile([
     TestCase("T")
     ]))
 
+def randLetter():
+    letter = ["T", "D"]
+    return letter[random.randint(0, 1)]
+
+cases = []
+cases.append(TestCase("T"*1000))
+
+p.add_hidden_test(TestFile(cases), 'main_edge')
+
 cases = []
 for i in range(80):
     cases.append(TestCase(i+1, 80-i))
 
-p.add_hidden_test(TestFile(cases), '')
-    
-#cases = []
-#for i in range(100):
-#    cases.append(TestCase(i+1, 10000-i))
-#
-#p.add_hidden_test(TestFile(cases), 'iota', subproblems=['bonus'])
+p.add_hidden_test(TestFile(cases), 'main_random')
 
 # # more ways to add test cases
 # @p.hidden_test_generator(test_count=4)
