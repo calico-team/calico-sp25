@@ -7,13 +7,13 @@ using namespace std;
 /**
  * Return the total money Big Ben pays
  *
- * L: vector of strings representing the people Big Ben talks to
+ * P: String representing the people Big Ben talks to
  */
-int solve(const vector<char>& L) {
+int solve(string P) {
     int total = 0;
     int money = 1;
-    for (int i = 0; i < L.size(); i++) {
-        if (L[i] == 'T') {
+    for (int i = 0; i < P.size(); i++) {
+        if (P[i] == 'T') {
             total += money;
             money = 1;
         }
@@ -28,14 +28,8 @@ int main() {
     int T;
     cin >> T;
     for (int i = 0; i < T; i++) {
-        vector<char> L;
-        string S;
-        cin >> S;
-        for (char c : S) {
-            if (c != ' ') {
-                L.push_back(c);
-            }
-        }
-        cout << solve(L) << '\n';
+        string P;
+        cin >> P;
+        cout << solve(P) << '\n';
     }
 }
