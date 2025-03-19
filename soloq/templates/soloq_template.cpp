@@ -5,10 +5,15 @@ using namespace std;
 long long int MOD = 1000000007;
 
 /**
- * Return the sum of A and B.
+ * Return the LP gain mode 10^9 + 7.
  * 
- * A: a non-negative integer
- * B: another non-negative integer
+ * N: Number of games
+ * K: Number of special streaks
+ * X: LP won per win
+ * Y: LP lost per loss
+ * W1 / W2: Chance to win in the Winners Queue
+ * L1 / L2: Chance to win in the Losers Queue
+ * S: List containing the K special streaks
  */
 int solve(int N, int K, int X, int Y, int W1, int W2, int L1, int L2, vector<string>& S) {
     // YOUR CODE HERE

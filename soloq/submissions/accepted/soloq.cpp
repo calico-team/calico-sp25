@@ -186,11 +186,11 @@ int solve(int N, int K, int X, int Y, int W1, int W2, int L1, int L2, vector<str
     d0[0][0] = 1;
     vector<vector<mi>> mu(2 * n, vector<mi>(1));
     for (int i = 0; i < n; ++i) {
-        mu[i][0] = mi(X) * W - mi(Y) * (mi(0) - W);
-        mu[i+n][0] = mi(X) * L - mi(Y) * (mi(0) - L);
+        mu[i][0] = mi(X) * W - mi(Y) * (mi(1) - W);
+        mu[i+n][0] = mi(X) * L - mi(Y) * (mi(1) - L);
     }
 
-    auto ans = d0 * geometricSum(A, n - 1) * mu;
+    auto ans = d0 * geometricSum(A, N - 1) * mu;
     return ans[0][0].v;
 
 }
