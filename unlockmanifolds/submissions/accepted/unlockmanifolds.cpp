@@ -18,11 +18,9 @@ int solve(int N, int M, vector<vector<int>> &G) {
         actions += min((row[i] - row[i - 1] + N) % N, (row[i - 1] - row[i] + N) % N);
         // horizontal move actions
         actions += min((col[i] - col[i - 1] + M) % M, (col[i - 1] - col[i] + M) % M);
+        
         // note: % in C++ can return a negative value, so we need to add N or M to normalize it
     }
-    
-    // click actions
-    actions += N * M;
     
     return actions;
 }

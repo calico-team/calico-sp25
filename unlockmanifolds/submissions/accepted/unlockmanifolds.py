@@ -17,7 +17,7 @@ def solve(N: int, M: int, G: list) -> int:
         hor_right = (cursor[1] - locations[b][1]) % M
         vert_up = (locations[b][0] - cursor[0]) % N
         vert_down = (cursor[0] - locations[b][0]) % N
-        actions += 1 + min(hor_left, hor_right) + min(vert_up, vert_down)
+        actions += min(hor_left, hor_right) + min(vert_up, vert_down)
         cursor = locations[b]
     return actions
 
