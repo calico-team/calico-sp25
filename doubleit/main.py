@@ -14,17 +14,15 @@ import random
 from calico_lib.multicase import TestCaseBase
 
 p = Problem["TestFile"](
-        'add',
+        'doubleit',
         test_sets=[
             Subproblem('main', rank=1),
-            Subproblem('bonus', rank=2, time_limit=4, mem_limit=1_000_000_000),
             ])
 
 class TestCase(NamedTuple):
-    X: int
-    Y: int
+    P: str
 
-solution = py_runner('submissions/accepted/add_arbitrary.py')
+solution = py_runner('submissions/accepted/doubleit.py')
 validator1 = py_runner('scripts/validator_main.py')
 validator2 = py_runner('scripts/validator.py')
 
@@ -53,36 +51,37 @@ class TestFile(TestFileBase):
 
 # adds to all subproblems by default
 p.add_sample_test(TestFile([
-    TestCase(4, 7),
-    TestCase(1, 23),
-    TestCase(9, 8),
-    TestCase(1, 1),
+    TestCase("TTTTT"),
+    TestCase("DDDDT"),
+    TestCase("TDDDD"),
+    TestCase("TDTDT"),
+    TestCase("T")
     ]))
 
 cases = []
 for i in range(80):
     cases.append(TestCase(i+1, 80-i))
 
-p.add_hidden_test(TestFile(cases), 'iota')
+p.add_hidden_test(TestFile(cases), '')
     
-cases = []
-for i in range(100):
-    cases.append(TestCase(i+1, 10000-i))
+#cases = []
+#for i in range(100):
+#    cases.append(TestCase(i+1, 10000-i))
+#
+#p.add_hidden_test(TestFile(cases), 'iota', subproblems=['bonus'])
 
-p.add_hidden_test(TestFile(cases), 'iota', subproblems=['bonus'])
+# # more ways to add test cases
+# @p.hidden_test_generator(test_count=4)
+# def pure_random() -> TestFile:
+#     test = TestFile([])
+#     for i in range(10):
+#         test.cases.append(TestCase(random.randint(1, 100), random.randint(1, 100)))
+#     return test
 
-# more ways to add test cases
-@p.hidden_test_generator(test_count=4)
-def pure_random() -> TestFile:
-    test = TestFile([])
-    for i in range(10):
-        test.cases.append(TestCase(random.randint(1, 100), random.randint(1, 100)))
-    return test
-
-@p.hidden_test_generator(test_count=4, subproblems=['bonus'])
-def pure_random2():
-    cases = (TestCase(random.randint(70, int(1e12)), random.randint(70, int(1e12))) for _ in range(100))
-    return TestFile(cases)
+# @p.hidden_test_generator(test_count=4, subproblems=['bonus'])
+# def pure_random2():
+#     cases = (TestCase(random.randint(70, int(1e12)), random.randint(70, int(1e12))) for _ in range(100))
+#     return TestFile(cases)
 
 def main():
     # p.run_cli()
