@@ -48,6 +48,9 @@ int main() {
     cin >> t;
     while (t--) {
         cin >> n >> m;
+        string str;
+        cin >> str;
+        len = str.length();
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 int x;
@@ -55,30 +58,29 @@ int main() {
                 arr[x - 1] = mp(i, j);
             }
         }
-        string str;
-        cin >> str;
-        len = str.length();
         prex[0] = prey[0] = 0;
         for (int i = 0; i < len; i++) {
             prex[i + 1] = prex[i];
             prey[i + 1] = prey[i];
-            if (str[i] == 'U') prey[i + 1]--;
-            else if (str[i] == 'D') prey[i + 1]++;
-            else if (str[i] == 'L') prex[i + 1]--;
-            else if (str[i] == 'R') prex[i + 1]++;
+            if (str[i] == 'U') prex[i + 1]--;
+            else if (str[i] == 'D') prex[i + 1]++;
+            else if (str[i] == 'L') prey[i + 1]--;
+            else if (str[i] == 'R') prey[i + 1]++;
         }
         int cx = 0, cy = 0, cm = 0;
         ll ans = 0;
         for (int i = 0; i < n * m; i++) {
             int nx = arr[i].f, ny = arr[i].s;
-            int l = -1, r = n * m;
+            if (cx == nx && cy == ny) continue;
+            int l = 0, r = n * m;
             while (l + 1 < r) {
                 int mid = (l + r) >> 1;
                 if (check(mid, cx, cy, nx, ny, cm)) r = mid;
                 else l = mid;
-                ans += r;
-                cm = (cm + r) % len;
             }
+            cm = (cm + r) % len;
+            ans += r;
+            cx = nx, cy = ny;
         }
         cout << ans << endl;
     }
