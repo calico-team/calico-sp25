@@ -4,9 +4,9 @@ class Solution {
     /**
      * Return the total money Big Ben pays
      *
-     * L: list of characters representing the people Big Ben talks to
+     * P: string of characters representing the people Big Ben talks to
      */
-    static int solve(String[] L) {
+    static int solve(String[] P) {
         // YOUR CODE HERE
         return -1;
     }
@@ -17,8 +17,8 @@ class Solution {
     public static void main(String[] args) throws IOException {
         int T = Integer.parseInt(in.readLine());
         for (int i = 0; i < T; i++) {
-            String[] L = in.readLine().split(" ");
-            out.println(solve(L));
+            String[] P = in.readLine().split(" ");
+            out.println(solve(P));
         }
         out.flush();
     }
