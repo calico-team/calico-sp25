@@ -17,7 +17,7 @@ def main():
     T = int(input())
     for _ in range(T):
         L = input()
-        P = input().split()
+        P = input()
         print(solve(L, P))
 
 

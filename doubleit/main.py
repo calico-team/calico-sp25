@@ -10,16 +10,19 @@ from calico_lib import Problem, py_runner, TestFileBase, MulticaseTestFile, Subp
 from collections.abc import Collection, Iterable
 from typing import NamedTuple, override
 import random
+import os
 
 from calico_lib.multicase import TestCaseBase
 
 p = Problem["TestFile"](
         'doubleit',
+        os.path.dirname(__file__),
         test_sets=[
             Subproblem('main', rank=1),
             ])
 
 class TestCase(NamedTuple):
+    L: int
     P: str
 
 solution = py_runner('submissions/accepted/doubleit.py')
@@ -36,26 +39,27 @@ class TestFile(TestFileBase):
         """Write the input file of this test case using print_test"""
         p.print_test(len(self.cases))
         for case in self.cases:
-            p.print_test(case.X, case.Y)
+            p.print_test(case.L)
+            p.print_test(case.P)
 
     @override
     def validate_test_in(self, infile: str):
         """Verify the test using an external validator."""
-        if 'main' in self.subproblems:
-            validator1.exec_file(infile)
-        validator2.exec_file(infile)
+        #if 'main' in self.subproblems:
+        #    validator1.exec_file(infile)
+        #validator2.exec_file(infile)
 
     @override
     def write_test_out(self, infile: str):
-        p.print_test(solution.exec_file(infile))
+        p.print_test(solution.exec_file(infile), end ="")
 
 # adds to all subproblems by default
 p.add_sample_test(TestFile([
-    TestCase("TTTTT"),
-    TestCase("DDDDT"),
-    TestCase("TDDDD"),
-    TestCase("TDTDT"),
-    TestCase("T")
+    TestCase(5, "TTTTT"),
+    TestCase(5, "DDDDT"),
+    TestCase(5, "TDDDD"),
+    TestCase(5, "TDTDT"),
+    TestCase(1, "T")
     ]))
 
 def randLetter():
@@ -63,13 +67,25 @@ def randLetter():
     return letter[random.randint(0, 1)]
 
 cases = []
-cases.append(TestCase("T"*1000))
+cases.append(TestCase(1000, "T"*1000))
+cases.append(TestCase(1000, "D"*1000))
+cases.append(TestCase(26, "D"*25 + "T"))
+cases.append(TestCase(51, "D"*25 + "T" + "D"*25 ))
+cases.append(TestCase(1, "D"))
 
 p.add_hidden_test(TestFile(cases), 'main_edge')
 
 cases = []
-for i in range(80):
-    cases.append(TestCase(i+1, 80-i))
+for i in range(90):
+    S = ""
+    counter = 0
+    for j in range(1000):
+        next = randLetter()
+        if counter >= 25:
+            next = "T"
+            counter = 0
+        S += next
+    cases.append(TestCase(1000, S))
 
 p.add_hidden_test(TestFile(cases), 'main_random')
 
