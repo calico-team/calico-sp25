@@ -67,32 +67,42 @@ class TestFile(TestFileBase):
 p.add_sample_test(TestFile([
     TestCase(10, 2, 30, 28, 1, 2, 1, 2, ["L", "W"]),
     TestCase(int(1e9 + 8), 6, 36, 34, 4, 7, 29, 351, ["L", "W", "LL", "LW", "WL", "WW"]),
+    TestCase(5,3,10,5,1,2,1,2,["WWLW", "LW", "LWLW"]),
     ]))
 
-# cases = []
-# for i in range(80):
-#     cases.append(TestCase(i+1, 80-i))
 
-# p.add_hidden_test(TestFile(cases), 'iota')
-    
-# cases = []
-# for i in range(100):
-#     cases.append(TestCase(i+1, 10000-i))
 
-# p.add_hidden_test(TestFile(cases), 'iota', subproblems=['bonus'])
+def generate_random_string(l: int):
+    return ''.join(['W' if random.randint(0,1) == 0 else 'L' for _ in range(l)])
 
-# # more ways to add test cases
-# @p.hidden_test_generator(test_count=4)
-# def pure_random() -> TestFile:
-#     test = TestFile([])
-#     for i in range(10):
-#         test.cases.append(TestCase(random.randint(1, 100), random.randint(1, 100)))
-#     return test
+def generate_random_case(k: int):
+    N = random.randint(int(1e10), int(1e12))
+    X = random.randint(0, int(1e9))
+    Y = random.randint(0, int(1e9))
+    W1 = random.randint(0, int(1e9))
+    W2 = random.randint(W1 if W1 != 0 else 1, int(1e9))
+    L1 = random.randint(0, int(1e9))
+    L2 = random.randint(L1 if L1 != 0 else 1, int(1e9))
+    S = [generate_random_string(random.randint(1, 15)) for _ in range(k)]
+    return TestCase(N, k, X, Y, W1, W2, L1, L2, S)
 
-# @p.hidden_test_generator(test_count=4, subproblems=['bonus'])
-# def pure_random2():
-#     cases = (TestCase(random.randint(70, int(1e12)), random.randint(70, int(1e12))) for _ in range(100))
-#     return TestFile(cases)
+def generate_small_random_test_file():
+    nums, s = [], 0
+    while s < 15 and len(nums) < 10:
+        nums.append(random.randint(1, 15 - s))
+        s += nums[-1]
+    return TestFile([generate_random_case(k) for k in nums])
+
+def generate_big_random_test_file():
+    return TestFile([generate_random_case(15)])
+
+for _ in range(5):
+    p.add_hidden_test(generate_small_random_test_file(), 'small_random')
+
+for _ in range(5):
+    p.add_hidden_test(generate_big_random_test_file(), 'big_random')
+
+# todo: edge the cases
 
 def main():
     # p.run_cli()
