@@ -115,27 +115,38 @@ def solve(N: int, K: int, X: int, Y: int, W1: int, W2: int, L1: int, L2: int, S:
         j_lose = AC.d[i].to[1]
         swap_lose = AC.d[j_lose].ends_here % 2 == 1
         if swap_lose:
-            A[i][j_lose + num_states] = MOD - W1
-            A[i + num_states][j_lose] = MOD - L1
+            A[i][j_lose + num_states] = 1 + MOD - W1
+            A[i + num_states][j_lose] = 1 + MOD - L1
         else:
-            A[i][j_lose] = MOD - W1
-            A[i + num_states][j_lose + num_states] = MOD - L2
+            A[i][j_lose] = 1 + MOD - W1
+            A[i + num_states][j_lose + num_states] = 1 + MOD - L1
     
     d0 = [[0 if i != 0 else 1 for i in range(2 * num_states)]]
-    mu = [[X * W1 - Y * (MOD - W1) if i < num_states else X * L1 - Y * (MOD - L1)] for i in range(2 * num_states)]
+    mu = [[X * W1 - Y * (1 + MOD - W1) if i < num_states else X * L1 - Y * (1 + MOD - L1)] for i in range(2 * num_states)]
     for v in mu:
         v[0] = (v[0] % MOD + MOD) % MOD
     
     # Returns sum from i = 1 to n of A^i
     def fun(n):
-        if n == 1:
-            return A
+        if n == 0:
+            return eye(2 * num_states)
         elif n % 2 == 1:
-            return matSum(matPow(A, n), fun(n - 1))
+            return matMul(
+                matSum(
+                    eye(2 * num_states),
+                    matPow(
+                        A, n // 2 + 1
+                    )
+                ),
+                fun(n // 2)
+            )
         else:
-            return matMul(matSum(eye(len(A)), matPow(A, n // 2)), fun(n // 2))
+            return matSum(
+                matPow(A, n),
+                fun(n - 1)
+            )
     
-    return matMul(d0, matMul(matSum(eye(len(A)), fun(N - 1)), mu))[0][0]
+    return matMul(d0, matMul(fun(N - 1), mu))[0][0]
 
 
 
