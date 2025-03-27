@@ -42,83 +42,115 @@ tcT> bool ckmax(T& a, const T& b) {
 	return a < b ? a = b, 1 : 0; } // set a = max(a,b)
 
 /**
- * Description: 1D range increment and sum query.
- * Source: USACO Counting Haybales
- 	* https://codeforces.com/blog/entry/82400
- * Verification: USACO Counting Haybales
+ * Description: Segment Tree with lazy updates. Segments are [l,r)
+ * Source: Nyaan's Library
+ * Verification:
+    * https://vjudge.net/problem/Yosupo-range_affine_range_sum
+ * Time: O(\log N) per query
  */
 
- struct LazySeg { 
-	struct F { // lazy update
-		db inc = 0;
-		F() {}
-		F(db x) { inc = x; }
-		F& operator*=(const F& a) { inc += a.inc; return *this; }
-	}; V<F> lazy;
-	struct T { // data you need to store for each interval
-		db mx = numeric_limits<db>::min();
-        T() {}
-		T(db x) { mx = x; }
-		friend T operator+(const T& a, const T& b) {
-            T res;
-            res.mx = max(a.mx, b.mx);
-            return res;
-		}
-		T& operator*=(const F& a) {
-            mx += a.inc;
-            return *this;
+template<typename T, typename E, T (*f)(T, T), T (*g)(T, E), E (*h)(E, E), T(*ti)(), E (*ei)()>
+struct LazySegTree {
+    int n, log, s;
+    V<T> val; V<E> laz;
+    LazySegTree() {}
+    LazySegTree(V<T> const& v) { init(v); }
+    void init(V<T> const& v) {
+        n = 1, log = 0, s = sz(v);
+        while (n < s) n <<= 1, ++log;
+        val.rsz(2 * n, ti());
+        laz.rsz(n, ei());
+        F0R(i, s) val[i+n] = v[i];
+        ROF(i,1,n) _update(i);
+    }
+    void update(int l, int r, E const& x) {
+        if (l >= r) return; // [l, r)
+        l += n, r += n;
+        ROF(i,1,log+1) {
+            if (((l>>i)<<i) != l) _push(l>>i);
+            if (((r>>i)<<i) != r) _push((r-1)>>i);
         }
-	}; V<T> seg;
-	int SZ = 1;
-	void init(const V<T>& _seg) {
-		while (SZ < sz(_seg)) SZ *= 2;
-		seg.rsz(2*SZ); lazy.rsz(2*SZ);
-		F0R(i,SZ) seg[SZ+i] = _seg[i];
-		ROF(i,1,SZ) pull(i);
-	}
-	void push(int ind) { /// modify values for current node
-		seg[ind] *= lazy[ind];
-		if (ind < SZ) F0R(i,2) lazy[2*ind+i] *= lazy[ind];
-		lazy[ind] = F();
-	} // recalc values for current node
-	void pull(int ind) { seg[ind] = seg[2*ind]+seg[2*ind+1]; }
-	void upd(int lo, int hi, F inc, int ind, int L, int R) {
-		push(ind); if (hi < L || R < lo) return;
-		if (lo <= L && R <= hi) { 
-			lazy[ind] = inc; push(ind); return; }
-		int M = (L+R)/2; upd(lo,hi,inc,2*ind,L,M); 
-		upd(lo,hi,inc,2*ind+1,M+1,R); pull(ind);
-	}
-	void upd(int lo, int hi, db inc) { upd(lo,hi,{inc},1,0,SZ-1); }
-	T query(int lo, int hi, int ind, int L, int R) {
-		push(ind); if (lo > R || L > hi) return T();
-		if (lo <= L && R <= hi) return seg[ind];
-		int M = (L+R)/2; 
-		return query(lo,hi,2*ind,L,M)+query(lo,hi,2*ind+1,M+1,R);
-	}
-	T query(int lo, int hi) { return query(lo,hi,1,0,SZ-1); }
+        int l2 = l, r2 = r;
+        while (l < r) {
+            if (l & 1) _apply(l++,x);
+            if (r & 1) _apply(--r,x);
+            l >>= 1, r >>= 1;
+        }
+        l = l2, r = r2;
+        FOR(i,1,log+1) {
+            if (((l>>i)<<i) != l) _update(l>>i);
+            if (((r>>i)<<i) != r) _update((r-1)>>i);
+        }
+    }
+    T query(int l, int r) {
+        if (l >= r) return ti(); // [l,r)
+        l += n, r +=n;
+        T L = ti(), R = ti();
+        ROF(i,1,log+1) {
+            if (((l>>i)<<i) != l) _push(l>>i);
+            if (((r>>i)<<i) != r) _push((r-1)>>i);
+        }
+        while (l < r) {
+            if (l & 1) L = f(L,val[l++]);
+            if (r & 1) R = f(val[--r], R);
+            l >>= 1, r >>= 1;
+        }
+        return f(L, R);
+    }
+    void set_val(int k, T const& x) {
+        k += n;
+        ROF(i,1,log+1)
+            if (((k>>i)<<i) != k or (((k+1)>>i)<<i) != (k+1))
+                _push(k>>i);
+        val[k] = x;
+        FOR(i,1,log+1)
+            if (((k>>i)<<i) != k or (((k+1)>>i)<<i) != (k+1))
+                _update(k>>i);
+    }
+private:
+    void _push(int i) {
+        if (laz[i] != ei()) {
+            F0R(j,2) val[2*i+j] = g(val[2*i+j],laz[i]);
+            if (2*i<n) F0R(j,2) compose(laz[2*i+j], laz[i]);
+        }
+        laz[i] = ei();
+    }
+    inline void _update(int i) { val[i] = f(val[2*i],val[2*i+1]); }
+    inline void _apply(int i, E const& x) {
+        if (x != ei()) {
+            val[i] = g(val[i], x);
+            if (i < n) compose(laz[i], x);
+        }
+    }
+    inline void compose(E& a, E const& b) { a = a == ei() ? b : h(a, b); }
 };
+
+using T = db;
+using E = db;
+T f(T a, T b) { return max(a, b); }
+T g(T a, E b) { return a + b; }
+E h(E a, E b) { return a + b; }
+T ti() { return -1e12; }
+E ei() { return 0; }
+
+using SegTree = LazySegTree<T, E, f, g, h, ti, ei>;
 
 using vd = vector<db>;
 
 // Returns true if the answer can be >= x
 bool possible(int n, int k, vd const& a, vd const& b, vd const& c, vd const& d, db x) {
-    int s = 2 * n + 5;
-    vector<LazySeg::T> v(s + 1);
-    for (int i = n + 1; i < sz(v); ++i)
-        v[i].mx = 0;
-    LazySeg st;
-    st.init(v);
+    vd v(2 * n + 1);
+    SegTree st(v);
     vd dp(n + 1);
     for (int i = n - 1; i >= 0; --i) {
-        dp[i] = a[i] - x * b[i] + max(dp[i + 1], st.query(i + k + 1, s).mx);
-        st.upd(i, i, dp[i]);
-        st.upd(i + 1, s, a[i] + c[i] - x * d[i]);
+        dp[i] = a[i] - x * b[i] + max(dp[i + 1], st.query(i + k + 1, 2 * n + 1));
+        st.update(i, i + 1, dp[i]);
+        st.update(i + 1, 2 * n + 1, a[i] + c[i] - x * d[i]);
     }
     return dp[0] >= 0;
 }
 
-double solve(int N, int K, vector<int> A, vector<int> B, vector<int> C, vector<int> D) {
+db solve(int N, int K, vector<int> A, vector<int> B, vector<int> C, vector<int> D) {
     vd a(N), b(N), c(N), d(N);
     for (int i = 0; i < N; ++i) {
         a[i] = A[i];

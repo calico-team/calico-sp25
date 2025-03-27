@@ -17,21 +17,23 @@ from calico_lib.multicase import TestCaseBase
 problem_dir = os.path.dirname(__file__)
 
 p = Problem(
-        'add',
+        'pokerogue',
         problem_dir, # problem is in the same directory as the python source file
         test_sets=[
-            Subproblem('main', rank=1),
-            Subproblem('bonus', rank=2, time_limit=4, mem_limit=1_000_000_000),
+            Subproblem('main', rank=3),
             ])
 
 class TestCase(NamedTuple):
-    X: int
-    Y: int
+    N: int
+    K: int
+    A: list[int]
+    B: list[int]
+    C: list[int]
+    D: list[int]
 
-solution = py_runner(os.path.join(problem_dir, 'submissions/accepted/add_arbitrary.py'))
-solution2 = cpp_runner(os.path.join(problem_dir, 'submissions/accepted/add_int.cpp'), 'add_int')
-validator1 = py_runner(os.path.join(problem_dir, 'scripts/validator_main.py'))
-validator2 = py_runner(os.path.join(problem_dir, 'scripts/validator.py'))
+# solution = py_runner(os.path.join(problem_dir, 'submissions/accepted/pokerogue.py'))
+solution2 = cpp_runner(os.path.join(problem_dir, 'submissions/accepted/pokerogue.cpp'), 'pokerogue')
+validator = py_runner(os.path.join(problem_dir, 'scripts/validator_main.py'))
 
 class TestFile(TestFileBase):
     def __init__(self, cases: Iterable[TestCase]) -> None:
@@ -43,14 +45,16 @@ class TestFile(TestFileBase):
         """Write the input file of this test case using print_test"""
         p.print_test(len(self.cases))
         for case in self.cases:
-            p.print_test(case.X, case.Y)
+            p.print_test(case.N, case.K)
+            p.print_test(*case.A)
+            p.print_test(*case.B)
+            p.print_test(*case.C)
+            p.print_test(*case.D)
 
     @override
     def validate_test_in(self, infile: str):
         """Verify the test using an external validator."""
-        if 'main' in self.subproblems:
-            validator1.exec_file(infile)
-        validator2.exec_file(infile)
+        validator.exec_file(infile)
 
     @override
     def write_test_out(self, infile: str):
@@ -58,36 +62,78 @@ class TestFile(TestFileBase):
 
 # adds to all subproblems by default
 p.add_sample_test(TestFile([
-    TestCase(4, 7),
-    TestCase(1, 23),
-    TestCase(9, 8),
-    TestCase(1, 1),
+    TestCase(4,1,[7,2,3,8],[1,2,3,4],[5,4,6,29],[1,2,3,14]),
+    TestCase(4,2,[2,20,200,6],[1,2,2,1],[1,40,40,6],[1,1,20,1]),
     ]))
 
-cases = []
-for i in range(80):
-    cases.append(TestCase(i+1, 80-i))
+def random_case(N: int):
+    K = random.randint(1, N)
+    A = [random.randint(1, 1000) for _ in range(N)]
+    B = [random.randint(1, 1000) for _ in range(N)]
+    C = [random.randint(1, 1000) for _ in range(N)]
+    D = [random.randint(1, 1000) for _ in range(N)]
+    return TestCase(N, K, A, B, C, D)
 
-p.add_hidden_test(TestFile(cases), 'iota')
-    
-cases = []
-for i in range(100):
-    cases.append(TestCase(i+1, 10000-i))
+def random_case_little_difference(N: int):
+    K = random.randint(1, N)
+    A = [random.randint(1, 1000) for _ in range(N)]
+    B = [random.randint(1, 1000) for _ in range(N)]
+    C = [random.randint(1, 10) for i in range(N)]
+    D = [B[i] + random.randint(-10,10) for i in range(N)]
+    for i in range(N):
+        if not 1 <= D[i] <= 1000:
+            D[i] = B[i]
+    return TestCase(N, K, A, B, C, D)
 
-p.add_hidden_test(TestFile(cases), 'iota', subproblems=['bonus'])
-
-# more ways to add test cases
-@p.hidden_test_generator(test_count=4)
-def pure_random() -> TestFile:
-    test = TestFile([])
-    for i in range(10):
-        test.cases.append(TestCase(random.randint(1, 100), random.randint(1, 100)))
-    return test
-
-@p.hidden_test_generator(test_count=4, subproblems=['bonus'])
-def pure_random2():
-    cases = (TestCase(random.randint(70, int(1e12)), random.randint(70, int(1e12))) for _ in range(100))
+def random_test_file(fun):
+    total_N = 0
+    cases = []
+    while len(cases) < 10 and total_N < 100000:
+        N = random.randint(1, 100000 - total_N)
+        total_N += N
+        cases.append(fun(N))
     return TestFile(cases)
+
+def big_test_file(fun):
+    return TestFile([fun(random.randint(90000, 100000))])
+
+for _ in range(5):
+    p.add_hidden_test(random_test_file(random_case), 'random_small')
+
+for _ in range(5):
+    p.add_hidden_test(random_test_file(random_case_little_difference), 'little_difference_small')
+
+for _ in range(5):
+    p.add_hidden_test(big_test_file(random_case), 'random_big')
+
+for _ in range(5):
+    p.add_hidden_test(big_test_file(random_case_little_difference), 'little_difference_big')
+
+
+# cases = []
+# for i in range(80):
+#     cases.append(TestCase(i+1, 80-i))
+
+# p.add_hidden_test(TestFile(cases), 'iota')
+    
+# cases = []
+# for i in range(100):
+#     cases.append(TestCase(i+1, 10000-i))
+
+# p.add_hidden_test(TestFile(cases), 'iota', subproblems=['bonus'])
+
+# # more ways to add test cases
+# @p.hidden_test_generator(test_count=4)
+# def pure_random() -> TestFile:
+#     test = TestFile([])
+#     for i in range(10):
+#         test.cases.append(TestCase(random.randint(1, 100), random.randint(1, 100)))
+#     return test
+
+# @p.hidden_test_generator(test_count=4, subproblems=['bonus'])
+# def pure_random2():
+#     cases = (TestCase(random.randint(70, int(1e12)), random.randint(70, int(1e12))) for _ in range(100))
+#     return TestFile(cases)
 
 def main():
     # p.run_cli()
