@@ -85,6 +85,22 @@ def random_case_little_difference(N: int):
             D[i] = B[i]
     return TestCase(N, K, A, B, C, D)
 
+def random_case_bigger_answer(N: int):
+    K = random.randint(1, N)
+    A = [random.randint(1, 1000) for _ in range(N)]
+    B = [random.randint(1, 10) for _ in range(N)]
+    C = [random.randint(1, 1000) for _ in range(N)]
+    D = [random.randint(1, 10) for _ in range(N)]
+    return TestCase(N, K, A, B, C, D)
+
+def random_case_small_answer(N: int):
+    K = random.randint(1, N)
+    A = [random.randint(1, 10) for _ in range(N)]
+    B = [random.randint(1, 1000) for _ in range(N)]
+    C = [random.randint(1, 10) for _ in range(N)]
+    D = [random.randint(1, 1000) for _ in range(N)]
+    return TestCase(N, K, A, B, C, D)
+
 def random_test_file(fun):
     total_N = 0
     cases = []
@@ -97,18 +113,29 @@ def random_test_file(fun):
 def big_test_file(fun):
     return TestFile([fun(random.randint(90000, 100000))])
 
-for _ in range(5):
-    p.add_hidden_test(random_test_file(random_case), 'random_small')
+for _ in range(3):
+    p.add_hidden_test(random_test_file(random_case), 'random_small_cases')
 
-for _ in range(5):
-    p.add_hidden_test(random_test_file(random_case_little_difference), 'little_difference_small')
+for _ in range(3):
+    p.add_hidden_test(random_test_file(random_case_little_difference), 'little_difference_small_cases')
 
-for _ in range(5):
-    p.add_hidden_test(big_test_file(random_case), 'random_big')
+for _ in range(3):
+    p.add_hidden_test(random_test_file(random_case_bigger_answer), 'big_answer_small_cases')
 
-for _ in range(5):
-    p.add_hidden_test(big_test_file(random_case_little_difference), 'little_difference_big')
+for _ in range(3):
+    p.add_hidden_test(random_test_file(random_case_small_answer), 'small_answer_small_cases')
 
+for _ in range(3):
+    p.add_hidden_test(big_test_file(random_case), 'random_one_case')
+
+for _ in range(3):
+    p.add_hidden_test(big_test_file(random_case_little_difference), 'little_difference_one_case')
+
+for _ in range(3):
+    p.add_hidden_test(big_test_file(random_case_bigger_answer), 'big_answer_one_case')
+
+for _ in range(3):
+    p.add_hidden_test(big_test_file(random_case_small_answer), 'small_answer_one_case')
 
 # cases = []
 # for i in range(80):

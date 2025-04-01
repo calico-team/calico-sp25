@@ -2,7 +2,7 @@
 using namespace std;
  
 using ll = long long;
-using db = long double; // or double if tight TL
+using db = double; // or double if tight TL
 using str = string;
 
 using pi = pair<int,int>;
@@ -137,18 +137,6 @@ using SegTree = LazySegTree<T, E, f, g, h, ti, ei>;
 
 using vd = vector<db>;
 
-// Returns true if the answer can be >= x
-bool possible(int n, int k, vd const& a, vd const& b, vd const& c, vd const& d, db x) {
-    vd v(2 * n + 1);
-    SegTree st(v);
-    vd dp(n + 1);
-    for (int i = n - 1; i >= 0; --i) {
-        dp[i] = a[i] - x * b[i] + max(dp[i + 1], st.query(i + k + 1, 2 * n + 1));
-        st.update(i, i + 1, dp[i]);
-        st.update(i + 1, 2 * n + 1, a[i] + c[i] - x * d[i]);
-    }
-    return dp[0] >= 0;
-}
 
 db solve(int N, int K, vector<int> A, vector<int> B, vector<int> C, vector<int> D) {
     vd a(N), b(N), c(N), d(N);
@@ -159,10 +147,20 @@ db solve(int N, int K, vector<int> A, vector<int> B, vector<int> C, vector<int> 
         d[i] = D[i];
     }
     db l = 0, r = 1e9;
-    while (r - l > 1e-6) {
-        db m = (r + l) / db(2);
-        if (possible(N, K, a, b, c, d, m)) l = m;
-        else r = m;
+    while (r - l > 1e-5) {
+        db x = (r + l) / db(2);
+        // Check if it's possible that ans >= x
+        vd v(N + 1);
+        SegTree st(v);
+        vd dp(N + 1);
+        for (int i = N - 1; i >= 0; --i) {
+            dp[i] = a[i] - x * b[i] + max(dp[i + 1], st.query(min(N, i + K + 1), N + 1));
+            st.update(i, i + 1, dp[i]);
+            st.update(i + 1, N + 1, a[i] + c[i] - x * d[i]);
+        }
+        // Possible iff dp[0] >= x
+        if (dp[0] >= 0) l = x;
+        else r = x;
     }
     return l;
 }
