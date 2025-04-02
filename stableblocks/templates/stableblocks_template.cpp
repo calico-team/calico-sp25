@@ -16,7 +16,7 @@ struct Block
 
 bool is_stable(const vector<Block> &blocks)
 {
-    // Write code here.
+    // YOUR CODE HERE
     return true;
 }
 
