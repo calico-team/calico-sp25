@@ -22,21 +22,20 @@ bool is_stable(const vector<Block> &blocks)
 
 int main()
 {
-    int numCases;
-    std::cin >> numCases;
+    int T;
+    std::cin >> T;
 
-    for (int i = 0; i < numCases; i++) {
-	int numBlocks;
-	std::cin >> numBlocks;
+    for (int j = 0; j < T; j++) {
+	int N;
+	std::cin >> N;
 
 	std::vector<Block> blocks;
-	blocks.reserve(numBlocks);
 
-	for (int b = 0; b < numBlocks; b++) {
+	for (int i = 0; i < N; i++) {
 	    Block block;
 	    std::cin >> block.lowerLeft.x >> block.lowerLeft.y
 		     >> block.upperRight.x >> block.upperRight.y;
-	    blocks.push_back(std::move(block));
+	    blocks.push_back(block);
 	}
 
 	if (is_stable(blocks)) {

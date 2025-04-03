@@ -3,11 +3,11 @@ def is_stable(blocks : list[tuple[tuple[int, int], tuple[int, int]]]) -> bool:
     return True
 
 def main():
-    numCases = int(input())
-    for i in range(numCases):
-        numBlocks = int(input())
+    T = int(input())
+    for j in range(T):
+        N = int(input())
         blocks = []
-        for b in range(numBlocks):
+        for i in range(N):
             lowerLeftX, lowerLeftY, upperRightX, upperRightY = input().split()
             blocks.append(
                 ((int(lowerLeftX),  int(lowerLeftY)),
