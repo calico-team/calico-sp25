@@ -1,3 +1,4 @@
+#pragma GCC optimize("O3,unroll-loops")
 #include <bits/stdc++.h>
 using namespace std;
  
@@ -143,10 +144,51 @@ V<T> operator*(const Mat& l, const V<T>& r) {
 	return ret;
 }
 Mat operator*(const Mat& a, const Mat& b) {
-	int x = sz(a), y = sz(a[0]), z = sz(b[0]); 
-	assert(y == sz(b)); Mat c = makeMat(x,z);
-	F0R(i,x) F0R(j,y) F0R(k,z) c[i][k] += a[i][j]*b[j][k];
-	return c;
+    if (sz(a) == sz(a[0]) && sz(b) == sz(b[0]) && sz(a) >= 256) {
+        // Strassen method
+        int n = sz(a);
+        if (n == 1) return {{a[0][0] * b[0][0]}};
+        Mat c = makeMat(n, n);
+        int m = n / 2;
+        Mat a11 = makeMat(m, m), a12 = a11, a21 = a11, a22 = a11, b11 = a11, b12 = a11, b21 = a11, b22 = a11;
+        F0R(i,m) F0R(j,m) {
+            a11[i][j] = a[i][j];
+            a12[i][j] = a[i][j+m];
+            a21[i][j] = a[i+m][j];
+            a22[i][j] = a[i+m][j+m];
+            b11[i][j] = b[i][j];
+            b12[i][j] = b[i][j+m];
+            b21[i][j] = b[i+m][j];
+            b22[i][j] = b[i+m][j+m];
+        }
+        Mat m1 = (a11 + a22) * (b11 + b22);
+        Mat m2 = (a21 + a22) * b11;
+        Mat m3 = a11 * (b12 - b22);
+        Mat m4 = a22 * (b21 - b11);
+        Mat m5 = (a11 + a12) * b22;
+        Mat m6 = (a21 - a11) * (b11 + b12);
+        Mat m7 = (a12 - a22) * (b21 + b22);
+
+        Mat c11 = m1 + m4 - m5 + m7;
+        Mat c12 = m3 + m5;
+        Mat c21 = m2 + m4;
+        Mat c22 = m1 + m3 - m2 + m6;
+
+        F0R(i,m) F0R(j,m) {
+            c[i][j] = c11[i][j];
+            c[i][j+m] = c12[i][j];
+            c[i+m][j] = c21[i][j];
+            c[i+m][j+m] = c22[i][j];
+        }
+        return c;
+
+    }
+    else {
+        int x = sz(a), y = sz(a[0]), z = sz(b[0]); 
+        assert(y == sz(b)); Mat c = makeMat(x,z);
+        F0R(i,x) F0R(j,y) F0R(k,z) c[i][k] += a[i][j]*b[j][k];
+        return c;
+    }
 }
 Mat& operator*=(Mat& a, const Mat& b) { return a = a*b; }
 Mat pow(Mat m, ll p) {
@@ -261,19 +303,21 @@ int solve(long long N, int K, int X, int Y, int W1, int W2, int L1, int L2, vect
         }
     }
     // Compute mu
-    V<vmi> mu(2 * n_states, vmi(1));
+    vmi mu(2 * n_states);
     F0R(i, n_states) {
-        mu[i][0] = X * w - Y * (1 - w);
-        mu[i + n_states][0] = X * l - Y * (1 - l);
+        mu[i] = X * w - Y * (1 - w);
+        mu[i + n_states] = X * l - Y * (1 - l);
     }
 
-    // Compute d0
-    V<vmi> d0(1, vmi(2 * n_states));
-    d0[0][0] = 1;
+    int pw = 1;
+    while (pw < sz(A)) pw <<= 1;
+    A.rsz(pw);
+    F0R(i, sz(A)) A[i].rsz(pw);
 
-    Mat ans = d0 * geometricSum(A, N - 1) * mu;
-
-    return ans[0][0].v;
+    Mat sum = geometricSum(A, N - 1);
+    mi ans = 0;
+    F0R(i, sz(mu)) ans += mu[i] * sum[0][i];
+    return ans.v;
 
 }
 

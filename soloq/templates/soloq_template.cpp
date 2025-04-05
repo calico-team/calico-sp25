@@ -5,7 +5,7 @@ using namespace std;
 long long int MOD = 1000000007;
 
 /**
- * Return the LP gain mode 10^9 + 7.
+ * Return the LP gain mod 10^9 + 7.
  * 
  * N: Number of games
  * K: Number of special streaks

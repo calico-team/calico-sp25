@@ -1,4 +1,6 @@
 MOD = 1000000007
+MAXWORDS = 10
+MAXWORDSIZE = 10
 
 def solve(N: int, K: int, X: int, Y: int, W1: int, W2: int, L1: int, L2: int, S: list[str]) -> int:
     """
@@ -14,7 +16,7 @@ def solve(N: int, K: int, X: int, Y: int, W1: int, W2: int, L1: int, L2: int, S:
     """
     # YOUR CODE HERE
     assert 1 <= N <= 1e12
-    assert 1 <= K <= 15
+    assert 1 <= K <= MAXWORDS
     assert 0 <= X <= 1e9
     assert 0 <= Y <= 1e9
     assert 0 <= W1 <= W2 <= 1e9
@@ -23,7 +25,7 @@ def solve(N: int, K: int, X: int, Y: int, W1: int, W2: int, L1: int, L2: int, S:
     assert L2 != 0
     assert len(S) == K
     for s in S:
-        assert 1 <= len(s) <= 15
+        assert 1 <= len(s) <= MAXWORDSIZE
         for c in s:
             assert (c in "WL")
     return 0
@@ -40,7 +42,7 @@ def main():
         X, Y, W1, W2, L1, L2 = map(int, input().split())
         S = [input() for _ in range(K)]
         solve(N, K, X, Y, W1, W2, L1, L2, S)
-    assert total_K <= 15
+    assert total_K <= MAXWORDS
 
 if __name__ == '__main__':
     main()
