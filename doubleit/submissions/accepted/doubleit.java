@@ -1,7 +1,7 @@
 import java.io.*;
 
 class Solution {
-    static int solve(int L, String P) {
+    static int solve(int N, String P) {
         int total = 0;
         int money = 1;
         for (int i = 0; i < P.length(); i++) {
@@ -21,9 +21,9 @@ class Solution {
     public static void main(String[] args) throws IOException {
         int T = Integer.parseInt(in.readLine());
         for (int i = 0; i < T; i++) {
-            int L = Integer.parseInt(in.readLine());
+            int N = Integer.parseInt(in.readLine());
             String P = in.readLine();
-            out.println(solve(L, P));
+            out.println(solve(N, P));
         }
         out.flush();
     }

@@ -7,9 +7,10 @@ using namespace std;
 /**
  * Return the total money Big Ben pays
  *
+ * N: length of the string P
  * P: String representing the people Big Ben talks to
  */
-int solve(int L, string P) {
+int solve(int N, string P) {
     int total = 0;
     int money = 1;
     for (int i = 0; i < P.size(); i++) {
@@ -28,10 +29,10 @@ int main() {
     int T;
     cin >> T;
     for (int i = 0; i < T; i++) {
-        int L;
+        int N;
         string P;
-        cin >> L;
+        cin >> N;
         cin >> P;
-        cout << solve(L, P) << '\n';
+        cout << solve(N, P) << '\n';
     }
 }
