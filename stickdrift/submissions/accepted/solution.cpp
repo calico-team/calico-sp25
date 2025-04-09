@@ -23,7 +23,7 @@ bool check(int v, int cx, int cy, int nx, int ny, int cm) {
     int ov = v;
     if (cm + v >= len) {
         cx += prex[len] - prex[cm];
-        cx += prey[len] - prey[cm];
+        cy += prey[len] - prey[cm];
         v -= (len - cm);
         cm = 0;
         int d = v / len;
