@@ -121,9 +121,9 @@ p.add_hidden_test(TestFile(cases), 'secret_01_main_random')
 #    return TestFile(cases)
 
 def main():
-    # p.run_cli()
-    p.create_all_tests()
-    p.create_zip()
+    p.run_cli()
+    # p.create_all_tests()
+    # p.create_zip()
 
 if __name__ == '__main__':
     main()
