@@ -163,7 +163,6 @@ for _ in range(3):
 #     return TestFile(cases)
 
 def main():
-    # p.run_cli()
 
     # increase stack size for running solutions using heaving recursion
     # import resource
@@ -173,8 +172,9 @@ def main():
     random.seed('add_seed_600')
     solution2.compile()
     p.init_problem()
-    p.create_all_tests()
-    p.create_zip()
+    # p.create_all_tests()
+    # p.create_zip()
+    p.run_cli()
 
 if __name__ == '__main__':
     main()
