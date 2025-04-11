@@ -5,8 +5,8 @@
 #   main: T <= 100, A <= 100, B <= 100
 #   bonus: T <= 1e5, A <= 1e12, B <= 1e12
 
-MAXWORDS = 10
-MAXWORDSIZE = 10
+MAXWORDS = 15
+MAXWORDSIZE = 15
 
 from typing import override
 from calico_lib import Problem, cpp_runner, py_runner, TestFileBase, MulticaseTestFile, Subproblem, Runner
@@ -38,7 +38,7 @@ class TestCase(NamedTuple):
     S: list[str]
 
 solution = py_runner(os.path.join(problem_dir, 'submissions/accepted/soloq.py'))
-solution2 = cpp_runner(os.path.join(problem_dir, 'submissions/accepted/soloq.cpp'), 'soloq')
+solution2 = cpp_runner(os.path.join(problem_dir, 'submissions/accepted/soloq_compress.cpp'), 'soloq_compress')
 validator1 = py_runner(os.path.join(problem_dir, 'scripts/validator_main.py'))
 
 class TestFile(TestFileBase):

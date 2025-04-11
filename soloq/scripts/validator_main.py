@@ -1,6 +1,6 @@
 MOD = 1000000007
-MAXWORDS = 10
-MAXWORDSIZE = 10
+MAXWORDS = 15
+MAXWORDSIZE = 15
 
 def solve(N: int, K: int, X: int, Y: int, W1: int, W2: int, L1: int, L2: int, S: list[str]) -> int:
     """
