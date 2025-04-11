@@ -146,8 +146,8 @@ db solve(int N, int K, vector<int> A, vector<int> B, vector<int> C, vector<int> 
         c[i] = C[i];
         d[i] = D[i];
     }
-    db l = 0, r = 1e9;
-    while (r - l > 1e-5) {
+    db l = 0, r = 2e6;
+    while (r - l > 1e-6) {
         db x = (r + l) / db(2);
         // Check if it's possible that ans >= x
         vd v(N + 1);
@@ -176,6 +176,6 @@ int main() {
         for (int& b : B) cin >> b;
         for (int& c : C) cin >> c;
         for (int& d : D) cin >> d;
-        cout << fixed << setprecision(5) << solve(N, K, A, B, C, D) << '\n';
+        cout << fixed << setprecision(7) << solve(N, K, A, B, C, D) << '\n';
     }
 }

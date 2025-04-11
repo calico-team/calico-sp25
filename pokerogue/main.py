@@ -4,7 +4,6 @@
 # Constraints:
 #   main: T <= 100, A <= 100, B <= 100
 #   bonus: T <= 1e5, A <= 1e12, B <= 1e12
-
 from typing import override
 from calico_lib import Problem, cpp_runner, py_runner, TestFileBase, MulticaseTestFile, Subproblem, Runner
 from collections.abc import Collection, Iterable
@@ -15,6 +14,10 @@ import os
 from calico_lib.multicase import TestCaseBase
 
 problem_dir = os.path.dirname(__file__)
+
+MAXTURNS = 1000
+MAXHP = 1000000
+
 
 p = Problem(
         'pokerogue',
@@ -68,37 +71,37 @@ p.add_sample_test(TestFile([
 
 def random_case(N: int):
     K = random.randint(1, N)
-    A = [random.randint(1, 1000) for _ in range(N)]
-    B = [random.randint(1, 1000) for _ in range(N)]
-    C = [random.randint(1, 1000) for _ in range(N)]
-    D = [random.randint(1, 1000) for _ in range(N)]
+    A = [random.randint(1, MAXHP) for _ in range(N)]
+    B = [random.randint(1, MAXTURNS) for _ in range(N)]
+    C = [random.randint(1, MAXHP) for _ in range(N)]
+    D = [random.randint(1, MAXTURNS) for _ in range(N)]
     return TestCase(N, K, A, B, C, D)
 
 def random_case_little_difference(N: int):
     K = random.randint(1, N)
-    A = [random.randint(1, 1000) for _ in range(N)]
-    B = [random.randint(1, 1000) for _ in range(N)]
+    A = [random.randint(1, MAXHP) for _ in range(N)]
+    B = [random.randint(1, MAXTURNS) for _ in range(N)]
     C = [random.randint(1, 10) for i in range(N)]
     D = [B[i] + random.randint(-10,10) for i in range(N)]
     for i in range(N):
-        if not 1 <= D[i] <= 1000:
+        if not 1 <= D[i] <= MAXTURNS:
             D[i] = B[i]
     return TestCase(N, K, A, B, C, D)
 
 def random_case_bigger_answer(N: int):
     K = random.randint(1, N)
-    A = [random.randint(1, 1000) for _ in range(N)]
+    A = [random.randint(1, MAXHP) for _ in range(N)]
     B = [random.randint(1, 10) for _ in range(N)]
-    C = [random.randint(1, 1000) for _ in range(N)]
+    C = [random.randint(1, MAXHP) for _ in range(N)]
     D = [random.randint(1, 10) for _ in range(N)]
     return TestCase(N, K, A, B, C, D)
 
 def random_case_small_answer(N: int):
     K = random.randint(1, N)
     A = [random.randint(1, 10) for _ in range(N)]
-    B = [random.randint(1, 1000) for _ in range(N)]
+    B = [random.randint(1, MAXTURNS) for _ in range(N)]
     C = [random.randint(1, 10) for _ in range(N)]
-    D = [random.randint(1, 1000) for _ in range(N)]
+    D = [random.randint(1, MAXTURNS) for _ in range(N)]
     return TestCase(N, K, A, B, C, D)
 
 def random_test_file(fun):
@@ -137,30 +140,6 @@ for _ in range(3):
 for _ in range(3):
     p.add_hidden_test(big_test_file(random_case_small_answer), 'small_answer_one_case')
 
-# cases = []
-# for i in range(80):
-#     cases.append(TestCase(i+1, 80-i))
-
-# p.add_hidden_test(TestFile(cases), 'iota')
-    
-# cases = []
-# for i in range(100):
-#     cases.append(TestCase(i+1, 10000-i))
-
-# p.add_hidden_test(TestFile(cases), 'iota', subproblems=['bonus'])
-
-# # more ways to add test cases
-# @p.hidden_test_generator(test_count=4)
-# def pure_random() -> TestFile:
-#     test = TestFile([])
-#     for i in range(10):
-#         test.cases.append(TestCase(random.randint(1, 100), random.randint(1, 100)))
-#     return test
-
-# @p.hidden_test_generator(test_count=4, subproblems=['bonus'])
-# def pure_random2():
-#     cases = (TestCase(random.randint(70, int(1e12)), random.randint(70, int(1e12))) for _ in range(100))
-#     return TestFile(cases)
 
 def main():
 

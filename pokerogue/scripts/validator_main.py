@@ -1,3 +1,6 @@
+MAXHP = 1000000
+MAXTURNS = 1000
+
 def solve(N: int, K: int, A: list[int], B: list[int], C: list[int], D: list[int]) -> float:
     """
     Return the best score you can achieve in the Daily Run.
@@ -13,13 +16,13 @@ def solve(N: int, K: int, A: list[int], B: list[int], C: list[int], D: list[int]
     assert 1 <= K <= N <= 100000
     assert len(A) == len(B) == len(C) == len(D) == N
     for a in A:
-        assert 1 <= a <= 1000
+        assert 1 <= a <= MAXHP
     for b in B:
-        assert 1 <= b <= 1000
+        assert 1 <= b <= MAXTURNS
     for c in C:
-        assert 1 <= c <= 1000
+        assert 1 <= c <= MAXHP
     for d in D:
-        assert 1 <= d <= 1000
+        assert 1 <= d <= MAXTURNS
 
 
 
