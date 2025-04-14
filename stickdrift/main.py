@@ -27,7 +27,7 @@ class TestCase(NamedTuple):
     S: str
     G: list
 
-solution = py_runner(os.path.join(problem_dir, 'submissions/accepted/unlockmanifolds.py'))
+solution = py_runner(os.path.join(problem_dir, 'submissions/accepted/stickdrift_translated.py'))
 # validator1 = py_runner(os.path.join('scripts/validator_main.py'))
 # validator2 = py_runner(os.path.join('scripts/validator.py'))
 
@@ -42,6 +42,7 @@ class TestFile(TestFileBase):
         p.print_test(len(self.cases))
         for case in self.cases:
             p.print_test(case.N, case.M)
+            p.print_test(case.S)
             for line in case.G:
                 temp = ""
                 for num in line:
@@ -61,32 +62,35 @@ class TestFile(TestFileBase):
 
 # adds to all subproblems by default
 p.add_sample_test(TestFile([ #Todo actually make sample tests
-    TestCase(3, 3, [
+    TestCase(2, 2, "UUD", [
+        [1, 2],
+        [3, 4]
+    ]),
+    TestCase(1, 4, "L", [
+        [4, 1, 2, 3]
+    ]),
+    TestCase(2, 3, "UD", [
+        [1, 3, 5],
+        [2, 4, 6]
+    ]),
+    TestCase(3, 3, "RRLLUUDD", [
         [1, 2, 3],
         [4, 5, 6],
         [7, 8, 9]
     ]),
-    TestCase(4, 2, [
-        [1, 3],
-        [5, 7],
-        [2, 4],
-        [6, 8]
-    ]),
-    TestCase(1, 8, [
-        [1, 2, 3, 4, 5, 6, 7, 8]
-    ]),
-    TestCase(1, 8, [
-        [1, 8, 7, 6, 5, 4, 3, 2]
-    ]),
-    TestCase(1, 1, [
+    TestCase(1, 1, "UDLR", [
         [1]
     ])
     ]))
 
+letters = ["U", "D", "L", "R"]
 cases = []
-for i in range(10): # Todo make this actually work
-    N = random.randint(1, 200)
-    M = random.randint(1, 200)
+total = 0
+while (True):
+    N = random.randint(1, 100)
+    M = random.randint(1, 100)
+    if (total + (N * M) > 180000):
+        break
     numbers = list(range(1, N * M + 1))
     random.shuffle(numbers)
     G = []
@@ -100,15 +104,31 @@ for i in range(10): # Todo make this actually work
             G.append(temp)
             temp = []
             count = 0
-    cases.append(TestCase(N, M, G))
+    randSeq = [0, 1, 2, 3]
+    random.shuffle(randSeq)
+    S = ""
+    for i in randSeq:
+        S += letters[i]
+    cases.append(TestCase(N, M, S, G))
+    total += N * M
 
 p.add_hidden_test(TestFile(cases), 'secret_01_main_random')
     
-#cases = []
-#for i in range(100):
-#    cases.append(TestCase(i+1, 10000-i))
+cases = []
+temp = []
+for i in range(1, 10000):
+    temp.append(i)
 
-#p.add_hidden_test(TestFile(cases), 'iota', subproblems=['bonus'])
+cases.append(TestCase(1, 10000, "L", [temp]))
+
+temp = []
+
+for i in range(1, 10000):
+    temp.append([i])
+
+cases.append(TestCase(10000, 1, "U", temp))
+
+#p.add_hidden_test(TestFile(cases), 'secret_02_main_edge')
 
 # more ways to add test cases
 #@p.hidden_test_generator(test_count=4)
