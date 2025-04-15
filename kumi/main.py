@@ -48,7 +48,9 @@ class TestFile(TestFileBase):
         p.print_test(solution.exec_file(infile))
 
 # adds to all subproblems by default
-p.add_sample_test(TestFile([5, 100, 20, 30]))
+p.add_sample_test(TestFile([1, 2, 20]))
+p.add_hidden_test(TestFile([i for i in range(1, 30)]))
+p.add_hidden_test(TestFile([1382, 19842, 38294, int(8e4 + 32)]))
 
 # more ways to add test cases
 # @p.hidden_test_generator(test_count=4)
