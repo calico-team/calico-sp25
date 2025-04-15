@@ -11,11 +11,13 @@ from collections.abc import Collection, Iterable
 from typing import NamedTuple, override
 import random
 import os
+from os import path
 
 from calico_lib.multicase import TestCaseBase
 
 problem_dir = os.path.dirname(__file__)
 
+random.seed('add_seed_600')
 p = Problem(
         'add',
         problem_dir, # problem is in the same directory as the python source file
@@ -28,10 +30,12 @@ class TestCase(NamedTuple):
     X: int
     Y: int
 
-solution = py_runner(os.path.join(problem_dir, 'submissions/accepted/add_arbitrary.py'))
-solution2 = cpp_runner(os.path.join(problem_dir, 'submissions/accepted/add_int.cpp'), 'add_int')
-validator1 = py_runner(os.path.join(problem_dir, 'scripts/validator_main.py'))
-validator2 = py_runner(os.path.join(problem_dir, 'scripts/validator.py'))
+solution = py_runner(path.join(problem_dir, 'submissions/accepted/add_arbitrary.py'))
+solution2 = cpp_runner(
+        path.join(problem_dir, 'submissions/accepted/add_int.cpp'),
+        path.join(problem_dir, 'add_int.bin'))
+validator1 = py_runner(path.join(problem_dir, 'scripts/validator_main.py'))
+validator2 = py_runner(path.join(problem_dir, 'scripts/validator.py'))
 
 class TestFile(TestFileBase):
     def __init__(self, cases: Iterable[TestCase]) -> None:
@@ -90,18 +94,17 @@ def pure_random2():
     return TestFile(cases)
 
 def main():
-    # p.run_cli()
-
     # increase stack size for running solutions using heaving recursion
     # import resource
     # resource.setrlimit(resource.RLIMIT_STACK, (268435456, 268435456))
 
     # TODO: set seed
-    random.seed('add_seed_600')
     solution2.compile()
-    p.init_problem()
-    p.create_all_tests()
-    p.create_zip()
+    p.run_cli()
+
+    # p.init_problem()
+    # p.create_all_tests()
+    # p.create_zip()
 
 if __name__ == '__main__':
     main()
