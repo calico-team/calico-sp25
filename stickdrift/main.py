@@ -116,19 +116,19 @@ p.add_hidden_test(TestFile(cases), 'secret_01_main_random')
     
 cases = []
 temp = []
-for i in range(1, 10000):
+for i in range(1, 10001):
     temp.append(i)
 
 cases.append(TestCase(1, 10000, "L", [temp]))
 
 temp = []
 
-for i in range(1, 10000):
+for i in range(1, 10001):
     temp.append([i])
 
 cases.append(TestCase(10000, 1, "U", temp))
 
-#p.add_hidden_test(TestFile(cases), 'secret_02_main_edge')
+p.add_hidden_test(TestFile(cases), 'secret_02_main_edge')
 
 # more ways to add test cases
 #@p.hidden_test_generator(test_count=4)
