@@ -1,17 +1,23 @@
-def solve(A: int, B: int) -> int:
-    '''
-    Implements addition with Python's arbitary precision arithmetic.
-    '''
-    return A + B
-
+def solve(C, P):
+    def helper(competitors, powers):
+        if (len(competitors) == 1):
+            return competitors[0]
+        winners = []
+        winnerPowers = []
+        for i in range(len(competitors) // 2):
+            if (powers[2 * i] > powers[2 * i + 1]):
+                winners.append(competitors[2 * i])
+            else:
+                winners.append(competitors[2 * i + 1])
+            winnerPowers.append(powers[2 * i] + powers[2 * i + 1])
+        return helper(winners, winnerPowers)
+    return helper(C, P)
 
 def main():
-    T = int(input())
-    for _ in range(T):
-        temp = input().split()
-        A, B = int(temp[0]), int(temp[1])
-        print(solve(A, B))
+    T = input()
+    for _ in range(int(T)):
+        C = input().split(" ")
+        P = list(map(lambda s: int(s), input().split(" ")))
+        print(solve(C, P))
 
-
-if __name__ == '__main__':
-    main()
+main()
