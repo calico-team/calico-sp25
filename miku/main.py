@@ -18,16 +18,16 @@ from calico_lib.multicase import TestCaseBase
 problem_dir = os.path.dirname(__file__)
 
 p = Problem(
-        'kumi',
+        'miku',
         problem_dir, # problem is in the same directory as the python source file
         test_sets=[
-            Subproblem('main', rank=1),
+            Subproblem('main', rank=2),
             ])
 
-solution = py_runner(path.join(problem_dir, 'submissions/accepted/sol.py'))
+solution = cpp_runner(path.join(problem_dir, 'submissions/accepted/solution.cpp'), path.join(problem_dir, 'sol.bin'))
 
 class TestFile(TestFileBase):
-    def __init__(self, cases: Iterable[int]) -> None:
+    def __init__(self, cases: Iterable[str]) -> None:
         self.cases = list(cases)
         super().__init__()
 
@@ -49,17 +49,25 @@ class TestFile(TestFileBase):
 
 # adds to all subproblems by default
 p.add_sample_test(TestFile([
-    TestCase("owwo"),
-    TestCase("oyowuoxuwo")
+    "owwo",
+    "oyowuoxuwo"
 ]))
 
+import string
+
+MAX_N = 1000
+
 # more ways to add test cases
-# @p.hidden_test_generator(test_count=4)
-# def pure_random() -> TestFile:
-#     test = TestFile([])
-#     for i in range(10):
-#         test.cases.append(TestCase(random.randint(1, 100), random.randint(1, 100)))
-#     return test
+@p.hidden_test_generator(test_count=1)
+def pure_random() -> TestFile:
+    test = TestFile([])
+    for i in range(10):
+        test.cases.append(''.join(random.choice(string.ascii_lowercase) for i in range(MAX_N)))
+    for i in range(10):
+        test.cases.append(''.join(random.choice('ooouuuuwwxyz') for i in range(MAX_N)))
+    for i in range(10):
+        test.cases.append(''.join(random.choice('o'*100+'w') for i in range(MAX_N)))
+    return test
 
 def main():
     # increase stack size for running solutions using heaving recursion
