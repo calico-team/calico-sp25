@@ -51,6 +51,7 @@ class TestFile(TestFileBase):
 p.add_sample_test(TestFile([1, 2, 20]))
 p.add_hidden_test(TestFile([i for i in range(1, 30)]))
 p.add_hidden_test(TestFile([1382, 19842, 38294, int(8e4 + 32)]))
+p.add_hidden_test(TestFile([100000 for i in range(30)]))
 
 # more ways to add test cases
 # @p.hidden_test_generator(test_count=4)
