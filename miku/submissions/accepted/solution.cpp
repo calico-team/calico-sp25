@@ -12,7 +12,8 @@ typedef long long ll;
 #define f first
 #define s second
 
-ll solve(int n, string str) {
+ll solve(string str) {
+    int n = str.length();
     int curw = -1, nxtw[n], sufo[n], sufu[n];
     sufo[n - 1] = sufu[n - 1] = 0;
     for (int i = n - 1; i >= 0; i--) {
@@ -43,9 +44,8 @@ int main() {
     int t;
     cin >> t;
     while (t--) {
-        int n;
         string str;
-        cin >> n >> str;
-        cout << solve(n, str) << endl;
+        cin >> str;
+        cout << solve(str) << endl;
     }
 }
