@@ -12,7 +12,7 @@ def solve(N: int, C: list, P: list) -> str:
         winners = []
         winnerPowers = []
         for i in range(len(competitors) // 2):
-            if (powers[2 * i] > powers[2 * i + 1]):
+            if (powers[2 * i] >= powers[2 * i + 1]):
                 winners.append(competitors[2 * i])
             else:
                 winners.append(competitors[2 * i + 1])

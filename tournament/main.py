@@ -16,22 +16,22 @@ from calico_lib.multicase import TestCaseBase
 
 problem_dir = os.path.dirname(__file__)
 
-p = Problem(
-        'add',
+p = Problem["TestFile"](
+        'tournament',
         problem_dir, # problem is in the same directory as the python source file
         test_sets=[
             Subproblem('main', rank=1),
-            Subproblem('bonus', rank=2, time_limit=4, mem_limit=1_000_000_000),
             ])
 
 class TestCase(NamedTuple):
-    X: int
-    Y: int
+    N: int
+    C: list
+    P: list
 
-solution = py_runner(os.path.join(problem_dir, 'submissions/accepted/add_arbitrary.py'))
-solution2 = cpp_runner(os.path.join(problem_dir, 'submissions/accepted/add_int.cpp'), 'add_int')
-validator1 = py_runner(os.path.join(problem_dir, 'scripts/validator_main.py'))
-validator2 = py_runner(os.path.join(problem_dir, 'scripts/validator.py'))
+solution = py_runner(os.path.join(problem_dir, 'submissions/accepted/tournament.py'))
+#solution2 = cpp_runner(os.path.join(problem_dir, 'submissions/accepted/add_int.cpp'), 'add_int')
+#validator1 = py_runner(os.path.join(problem_dir, 'scripts/validator_main.py'))
+#validator2 = py_runner(os.path.join(problem_dir, 'scripts/validator.py'))
 
 class TestFile(TestFileBase):
     def __init__(self, cases: Iterable[TestCase]) -> None:
@@ -43,51 +43,89 @@ class TestFile(TestFileBase):
         """Write the input file of this test case using print_test"""
         p.print_test(len(self.cases))
         for case in self.cases:
-            p.print_test(case.X, case.Y)
+            p.print_test(case.N)
+            temp = ""
+            for s in case.C:
+                temp = temp + " " + s
+            p.print_test(temp.strip())
+            temp = ""
+            for num in case.P:
+                temp = temp + " " + str(num)
+            p.print_test(temp.strip())
 
     @override
     def validate_test_in(self, infile: str):
         """Verify the test using an external validator."""
-        if 'main' in self.subproblems:
-            validator1.exec_file(infile)
-        validator2.exec_file(infile)
+        #if 'main' in self.subproblems:
+        #    validator1.exec_file(infile)
+        #validator2.exec_file(infile)
 
     @override
     def write_test_out(self, infile: str):
-        p.print_test(solution2.exec_file(infile))
+        p.print_test(solution.exec_file(infile), end='')
 
 # adds to all subproblems by default
 p.add_sample_test(TestFile([
-    TestCase(4, 7),
-    TestCase(1, 23),
-    TestCase(9, 8),
-    TestCase(1, 1),
+    TestCase(4, 
+             ["TralaleroTralala", "BombardiroCrocodilo", "BrrBrrPatapim", "LiriliLarila"],
+             [42750, 31645, 12455, 12455]),
+    TestCase(2,
+             ["TungTungTungTungTungTungSahur", "CappuccinoAssassino"],
+             [523530, 500250]),
+    TestCase(2, 
+             ["TralaleroTralala", "TungTungTungTungTungTungSahur"],
+             [100000, 100000]),
+    TestCase(26, 
+             ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
+             [1, 26, 2, 25, 3, 24, 4, 23, 5, 22, 6, 21, 7, 20, 8, 19, 9, 18, 10, 17, 11, 16, 12, 15, 13, 14]),
+    TestCase(1,
+             ["LaVaccaSaturnoSaturnita"],
+             [12510])
     ]))
 
-cases = []
-for i in range(80):
-    cases.append(TestCase(i+1, 80-i))
+Alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+usedNames = {"A"}
 
-p.add_hidden_test(TestFile(cases), 'iota')
+def randName():
+    while True:
+        l = random.randint(1, 10)
+        name = ""
+        for _ in range(l):
+            letter = random.randint(0, 25)
+            name += Alphabet[letter]
+        if (not name in usedNames):
+            usedNames.add(name)
+            return name
+        
+
+def randPower():
+    return random.randint(0, 1000000)
+
+cases = []
+for i in range(95):
+    N = 1000
+    C = []
+    P = []
+    for _ in range(N):
+        C.append(randName())
+        P.append(randPower())
+    cases.append(TestCase(N, C, P))
+
+
+p.add_hidden_test(TestFile(cases), 'secret_01_main_random')
     
-cases = []
-for i in range(100):
-    cases.append(TestCase(i+1, 10000-i))
-
-p.add_hidden_test(TestFile(cases), 'iota', subproblems=['bonus'])
-
 # more ways to add test cases
-@p.hidden_test_generator(test_count=4)
-def pure_random() -> TestFile:
-    test = TestFile([])
-    for i in range(10):
-        test.cases.append(TestCase(random.randint(1, 100), random.randint(1, 100)))
-    return test
+#@p.hidden_test_generator(test_count=4)
+#def pure_random() -> TestFile:
+#    test = TestFile([])
+#    for i in range(10):
+#       test.cases.append(TestCase(random.randint(1, 100), random.randint(1, 100)))
+#    return test
 
-@p.hidden_test_generator(test_count=4, subproblems=['bonus'])
-def pure_random2():
-    cases = (TestCase(random.randint(70, int(1e12)), random.randint(70, int(1e12))) for _ in range(100))
-    return TestFile(cases)
+#@p.hidden_test_generator(test_count=4, subproblems=['bonus'])
+#def pure_random2():
+#    cases = (TestCase(random.randint(70, int(1e12)), random.randint(70, int(1e12))) for _ in range(100))
+#    return TestFile(cases)
 
 def main():
     # p.run_cli()
@@ -97,9 +135,8 @@ def main():
     # resource.setrlimit(resource.RLIMIT_STACK, (268435456, 268435456))
 
     # TODO: set seed
-    random.seed('add_seed_600')
-    solution2.compile()
-    p.init_problem()
+    #random.seed('add_seed_600')
+    #p.init_problem()
     p.create_all_tests()
     p.create_zip()
 
