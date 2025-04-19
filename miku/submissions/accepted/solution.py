@@ -2,7 +2,7 @@ import sys
 
 def solve(s: str) -> int:
     # curw tracks the most recent 'w' index to the right
-    n = len(str)
+    n = len(s)
     curw = -1
     nxtw = [-1] * n
     sufo = [0] * n  # suffix count of 'o'
