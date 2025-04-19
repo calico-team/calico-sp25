@@ -1,4 +1,5 @@
 import re
+from sys import stderr
 
 pos_int_re = re.compile(r'^[1-9]\d*$')
 int_pattern = r'(0|-?[1-9]\d*)'
@@ -7,7 +8,7 @@ block_re = re.compile(r'^' + ' '.join(4 * [int_pattern]) + '$')
 if __name__ == '__main__':
     import sys
 
-    lines = open(sys.argv[1]).read().split('\n')
+    lines = list(sys.stdin)
 
     line_no = 0
 
@@ -60,8 +61,9 @@ if __name__ == '__main__':
     if not total_blocks < 100000:
         raise Exception("Total number of blocks %d < 100000" % total_blocks)
 
-    if lines[line_no] != '':
-        raise Exception("Not ending with new line")
+    if lines[line_no] != '' and lines[line_no] != '\n':
+        print("bytes :" + str(lines[line_no].encode()), file=stderr)
+        raise Exception("Not ending with new line: " + lines[line_no])
     line_no += 1
 
     if line_no != len(lines):
