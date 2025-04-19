@@ -16,7 +16,7 @@ from calico_lib.multicase import TestCaseBase
 
 problem_dir = os.path.dirname(__file__)
 
-p = Problem["TestFile"](
+p = Problem(
         'tournament',
         problem_dir, # problem is in the same directory as the python source file
         test_sets=[
@@ -135,10 +135,11 @@ def main():
     # resource.setrlimit(resource.RLIMIT_STACK, (268435456, 268435456))
 
     # TODO: set seed
-    #random.seed('add_seed_600')
-    #p.init_problem()
-    p.create_all_tests()
-    p.create_zip()
+    random.seed('tournament')
+    p.init_problem()
+    # p.create_all_tests()
+    # p.create_zip()
+    p.run_cli()
 
 if __name__ == '__main__':
     main()
