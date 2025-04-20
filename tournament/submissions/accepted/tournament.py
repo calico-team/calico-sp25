@@ -17,6 +17,9 @@ def solve(N: int, C: list, P: list) -> str:
             else:
                 winners.append(competitors[2 * i + 1])
             winnerPowers.append(powers[2 * i] + powers[2 * i + 1])
+        if (len(competitors) % 2 == 1):
+            winners.append(competitors[-1])
+            winnerPowers.append(powers[-1])
         return helper(winners, winnerPowers)
     return helper(C, P)
 
