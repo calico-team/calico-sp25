@@ -35,7 +35,8 @@ class TestCase(NamedTuple):
     D: list[int]
 
 # solution = py_runner(os.path.join(problem_dir, 'submissions/accepted/pokerogue.py'))
-solution2 = cpp_runner(os.path.join(problem_dir, 'submissions/accepted/pokerogue.cpp'), 'pokerogue')
+solution2 = cpp_runner(os.path.join(problem_dir, 'submissions/accepted/pokerogue.cpp'),
+                       os.path.join(problem_dir, 'pokerogue'))
 validator = py_runner(os.path.join(problem_dir, 'scripts/validator_main.py'))
 
 class TestFile(TestFileBase):
@@ -147,8 +148,7 @@ def main():
     # import resource
     # resource.setrlimit(resource.RLIMIT_STACK, (268435456, 268435456))
 
-    # TODO: set seed
-    random.seed('add_seed_600')
+    random.seed('pokepokeroguerogue')
     solution2.compile()
     p.init_problem()
     # p.create_all_tests()
