@@ -14,7 +14,7 @@ import os
 
 problem_dir = os.path.dirname(__file__)
 
-p = Problem["TestFile"](
+p = Problem(
         'unlockmanifolds',
         os.path.dirname(__file__),
         test_sets=[
@@ -65,11 +65,9 @@ p.add_sample_test(TestFile([
         [4, 5, 6],
         [7, 8, 9]
     ]),
-    TestCase(4, 2, [
-        [1, 3],
-        [5, 7],
-        [2, 4],
-        [6, 8]
+    TestCase(2, 2, [
+        [4, 3],
+        [2, 1]
     ]),
     TestCase(1, 8, [
         [1, 2, 3, 4, 5, 6, 7, 8]
