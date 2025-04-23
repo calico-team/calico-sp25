@@ -24,6 +24,7 @@ p = Problem(
             Subproblem('main', rank=1),
             ])
 
+p.custom_checker = 'kumi_compare'
 solution = py_runner(path.join(problem_dir, 'submissions/accepted/sol.py'))
 
 class TestFile(TestFileBase):
