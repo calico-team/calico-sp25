@@ -14,7 +14,7 @@ import os
 
 problem_dir = os.path.dirname(__file__)
 
-p = Problem["TestFile"](
+p = Problem(
         'stickdrift',
         os.path.dirname(__file__),
         test_sets=[
@@ -87,9 +87,9 @@ letters = ["U", "D", "L", "R"]
 cases = []
 total = 0
 while (True):
-    N = random.randint(1, 100)
-    M = random.randint(1, 100)
-    if (total + (N * M) > 180000):
+    N = random.randint(50, 200)
+    M = random.randint(50, 200)
+    if (total + (N * M) > 200000):
         break
     numbers = list(range(1, N * M + 1))
     random.shuffle(numbers)
@@ -116,19 +116,78 @@ p.add_hidden_test(TestFile(cases), 'secret_01_main_random')
     
 cases = []
 temp = []
-for i in range(1, 10001):
+for i in range(1, 100001):
     temp.append(i)
 
-cases.append(TestCase(1, 10000, "L", [temp]))
+cases.append(TestCase(1, 100000, "L", [temp]))
 
 temp = []
 
-for i in range(1, 10001):
+for i in range(1, 100001):
     temp.append([i])
 
-cases.append(TestCase(10000, 1, "U", temp))
+cases.append(TestCase(100000, 1, "U", temp))
 
-p.add_hidden_test(TestFile(cases), 'secret_02_main_edge')
+p.add_hidden_test(TestFile(cases), 'secret_02_main_edgeLine')
+
+cases = []
+
+# Python program to create a spiral matrix from given array
+#Credit to https://www.geeksforgeeks.org/form-a-spiral-matrix-from-the-given-array/
+
+def spiralFill(n, m, arr):
+    res = [[-1] * m for _ in range(n)]
+
+    # Change in row index for each direction
+    dr = [0, 1, 0, -1]
+
+    # Change in column index for each direction
+    dc = [1, 0, -1, 0]
+
+    # Initial direction index (0 corresponds to 'right')
+    dirIdx = 0
+
+    index = 0
+    r, c = 0, 0
+
+    while index < len(arr):
+        res[r][c] = arr[index]
+        index += 1
+
+        # The next cell indices
+        newR = r + dr[dirIdx]
+        newC = c + dc[dirIdx]
+
+        # Check if the next cell is out of bounds or
+        # it is already filled, then update the direction
+        if newR < 0 or newR == n or newC < 0 or newC == m \
+        						 or res[newR][newC] != -1:
+            dirIdx = (dirIdx + 1) % 4
+
+            newR = r + dr[dirIdx]
+            newC = c + dc[dirIdx]
+
+        # Update the cells
+        r = newR
+        c = newC
+
+    return res
+
+N = 1000
+M = 100
+numbers = list(range(1, N * M + 1))
+temp = spiralFill(N, M, numbers)
+
+cases.append(TestCase(N, M, "UDLR", temp))
+
+N = 10000
+M = 10
+numbers = list(range(1, N * M + 1))
+temp = spiralFill(N, M, numbers)
+
+cases.append(TestCase(N, M, "UDLR", temp))
+
+p.add_hidden_test(TestFile(cases), 'secret_03_main_edgeSpiral')
 
 # more ways to add test cases
 #@p.hidden_test_generator(test_count=4)
