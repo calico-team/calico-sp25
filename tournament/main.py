@@ -69,15 +69,15 @@ p.add_sample_test(TestFile([
     TestCase(4, 
              ["TralaleroTralala", "BombardiroCrocodilo", "BrrBrrPatapim", "LiriliLarila"],
              [42750, 31645, 12455, 12455]),
-    TestCase(3,
-             ["TungTungTungTungTungTungSahur", "CappuccinoAssassino", "BigBen"],
-             [523530, 500250, 999999999]),
+    TestCase(2,
+             ["TungTungTungTungTungTungSahur", "BigBen"],
+             [523530, 999999999]),
     TestCase(2, 
              ["TralaleroTralala", "TungTungTungTungTungTungSahur"],
              [100000, 100000]),
-    TestCase(26, 
-             ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
-             [1, 26, 2, 25, 3, 24, 4, 23, 5, 22, 6, 21, 7, 20, 8, 19, 9, 18, 10, 17, 11, 16, 12, 15, 13, 14]),
+    TestCase(16, 
+             ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"],
+             [1, 16, 2, 15, 3, 14, 4, 13, 5, 12, 6, 11, 7, 10, 8, 9]),
     TestCase(1,
              ["LaVaccaSaturnoSaturnita"],
              [12510])
@@ -101,9 +101,13 @@ def randName():
 def randPower():
     return random.randint(0, 1000000)
 
+def randN():
+    power = random.randint(0, 6)
+    return 2 ** power
+
 cases = []
-for i in range(95):
-    N = 1000
+for i in range(100):
+    N = randN()
     C = []
     P = []
     for _ in range(N):

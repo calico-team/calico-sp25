@@ -24,6 +24,8 @@ class Solution {
         for (int i = 0; i < C.size(); i += 2) {
             if (P.get(i) > P.get(i + 1)) {
                 Winners.add(C.get(i));
+            } else if (P.get(i) == P.get(i + 1)) {
+                Winners.add(C.get(i) + C.get(i + 1));
             } else {
                 Winners.add(C.get(i + 1));
             }

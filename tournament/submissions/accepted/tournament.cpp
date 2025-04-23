@@ -15,6 +15,8 @@ string helper(const vector<string>& C, const vector<int>& P) {
     for (int i = 0; i < C.size(); i += 2) {
         if (P[i] > P[i + 1]) {
             winners.push_back(C[i]);
+        } else if (P[i] == P[i + 1]){
+            winners.push_back(C[i] + C[i + 1]);
         } else {
             winners.push_back(C[i + 1]);
         }
