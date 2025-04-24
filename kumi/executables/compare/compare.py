@@ -17,6 +17,7 @@ def main():
         exit(1)
 
 
+import string
 def compare(test_in, test_out):
     T = int(read_file(test_in))
     for case in range(1, T + 1):
@@ -25,9 +26,9 @@ def compare(test_in, test_out):
 
         # Read solution from the contestant
         contestant_solution = read()
-        # Check that it is just one number
-        if len(contestant_solution) != 1:
-            print(f'Test #{case}: Contestant outputs more than one string per line')
+        for x in contestant_solution:
+            if x not in string.ascii_lowercase:
+                print(f'Test #{case}: unexpected character "{x}"')
 
         x = solve(contestant_solution)
         if (x != judge_solution):

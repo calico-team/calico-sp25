@@ -2,6 +2,7 @@
 solution sketch:
     start with uwuwuwuwuwuwuw = "uw"*m
     answer is m*(m-1)//2
+    find smallest m such that answer >= N
 
     remove 3 consecutive w's (uwuwuwuw ==> uuuuw): answer reduces by 6
     remove a single w (uwu ==> uu): answer reduces by 1
@@ -10,6 +11,9 @@ solution sketch:
 T = int(input())
 for _ in range(T):
     N = int(input())
+    if N < 30:
+        print('uw' + 'u' * N)
+        continue
 
     m = 2
     while m*m - m < 2*N:
