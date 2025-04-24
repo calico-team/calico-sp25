@@ -118,8 +118,9 @@ def main():
     random.seed('add_seed_600')
     solution2.compile()
     p.init_problem()
-    p.create_all_tests()
-    p.create_zip()
+    # p.create_all_tests()
+    # p.create_zip()
+    p.run_cli()
 
 if __name__ == '__main__':
     main()
