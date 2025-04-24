@@ -6,12 +6,15 @@ solution sketch:
 
     remove 3 consecutive w's (uwuwuwuw ==> uuuuw): answer reduces by 6
     remove a single w (uwu ==> uu): answer reduces by 1
+
+    does not work for small N
+    (probably) works for large enough N
 """
 
 T = int(input())
 for _ in range(T):
     N = int(input())
-    if N < 30:
+    if N < 1000:
         print('uw' + 'u' * N)
         continue
 

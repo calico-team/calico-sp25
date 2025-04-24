@@ -5,7 +5,7 @@
 #   main: T <= 100, A <= 100, B <= 100
 #   bonus: T <= 1e5, A <= 1e12, B <= 1e12
 
-from typing import override
+from typing import assert_type, override
 from calico_lib import Problem, cpp_runner, py_runner, TestFileBase, MulticaseTestFile, Subproblem, Runner
 from collections.abc import Collection, Iterable
 from typing import NamedTuple, override
@@ -41,8 +41,9 @@ class TestFile(TestFileBase):
 
     @override
     def validate_test_in(self, infile: str):
-        """Verify the test using an external validator."""
-        # validator1.exec_file(infile)
+        assert len(self.cases) <= 30
+        for i in self.cases:
+            assert 1 <= i <= 1e9
 
     @override
     def write_test_out(self, infile: str):
@@ -50,17 +51,27 @@ class TestFile(TestFileBase):
 
 # adds to all subproblems by default
 p.add_sample_test(TestFile([1, 2, 20]))
-p.add_hidden_test(TestFile([i for i in range(1, 30)]))
+for i in range(1, 5):
+    p.add_hidden_test(TestFile([i for i in range(i*30, i*30+30)]))
+
 p.add_hidden_test(TestFile([1382, 19842, 38294, int(8e4 + 32)]))
-p.add_hidden_test(TestFile([100000 for i in range(30)]))
+p.add_hidden_test(TestFile([100000 + i for i in range(30)]))
+
+# wolframalpha: prime numbers greater than 9e8
+p.add_hidden_test(TestFile([900000011, 900000041, 900000053, 900000067, 900000083, 900000107, 900000131, 900000197, 900000209, 900000221]))
 
 # more ways to add test cases
-# @p.hidden_test_generator(test_count=4)
-# def pure_random() -> TestFile:
-#     test = TestFile([])
-#     for i in range(10):
-#         test.cases.append(TestCase(random.randint(1, 100), random.randint(1, 100)))
-#     return test
+def pure_random(max_n: int) -> TestFile:
+    cases = []
+    for i in range(30):
+        cases.append(random.randint(1, int(max_n)))
+    return TestFile(cases)
+
+for i in [200, 2000, 2e5, 2e6, 2e7]:
+    p.add_hidden_test(pure_random(i))
+    p.add_hidden_test(pure_random(i))
+    p.add_hidden_test(pure_random(i))
+    p.add_hidden_test(pure_random(i))
 
 def main():
     # increase stack size for running solutions using heaving recursion
