@@ -17,6 +17,7 @@ from calico_lib.multicase import TestCaseBase
 
 problem_dir = os.path.dirname(__file__)
 
+random.seed('teto_teto_teto_teto_teto_teto')
 p = Problem(
         'miku',
         problem_dir, # problem is in the same directory as the python source file
@@ -75,7 +76,6 @@ def main():
     # resource.setrlimit(resource.RLIMIT_STACK, (268435456, 268435456))
 
     # TODO: set seed
-    random.seed('teto_teto_teto_teto_teto_teto')
     solution.compile()
     p.init_problem()
     p.run_cli()
