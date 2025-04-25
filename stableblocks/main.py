@@ -54,45 +54,55 @@ validator4 = cpp_runner(
         os.path.join(problem_dir,
                      'v4.bin'))
 
-class TestFile(TestFileBase):
-    def __init__(self, gen_exe: Runner) -> None:
-        self.gen_exe = gen_exe
-        super().__init__()
+p.add_raw_test_NO_VALIDATE('data/sample/sample_00_main', ['main', 'bonus'])
+p.add_raw_test_NO_VALIDATE('data/sample/sample_00_bonus', ['bonus'])
 
-    @override
-    def write_test_in(self):
-        """Write the input file of this test case using print_test"""
-        p.print_test(self.gen_exe.exec())
+p.add_raw_test_NO_VALIDATE('data/secret/main', ['main', 'bonus'])
+p.add_raw_test_NO_VALIDATE('data/secret/main_curated', ['main', 'bonus'])
 
-    @override
-    def validate_test_in(self, infile: str):
-        """Verify the test using an external validator."""
-        if 'main' in self.subproblems:
-            validator1.exec_file(infile)
-        validator2.exec_file(infile)
+p.add_raw_test_NO_VALIDATE('data/secret/bonus', ['bonus'])
+p.add_raw_test_NO_VALIDATE('data/secret/bonus_curated', ['bonus'])
 
-    @override
-    def write_test_out(self, infile: str):
-        p.print_test(solution.exec_file(infile))
+# class TestFile(TestFileBase):
+#     def __init__(self, gen_exe: Runner) -> None:
+#         self.gen_exe = gen_exe
+#         super().__init__()
+#
+#     @override
+#     def write_test_in(self):
+#         """Write the input file of this test case using print_test"""
+#         p.print_test(self.gen_exe.exec())
+#
+#     @override
+#     def validate_test_in(self, infile: str):
+#         """Verify the test using an external validator."""
+#         if 'main' in self.subproblems:
+#             validator1.exec_file(infile)
+#         validator2.exec_file(infile)
+#
+#     @override
+#     def write_test_out(self, infile: str):
+#         p.print_test(solution.exec_file(infile))
 
-p.add_hidden_test(
-        TestFile(
-            py_runner(
-                os.path.join(problem_dir, 'make_data/main.py'))
-            ),
-        'main',
-        ['main']
-        )
+# p.add_hidden_test(
+#         TestFile(
+#             py_runner(
+#                 os.path.join(problem_dir, 'make_data/main.py'))
+#             ),
+#         'main',
+#         ['main']
+#         )
+#
+# p.add_hidden_test(
+#         TestFile(
+#             py_runner(
+#                 os.path.join(problem_dir, 'make_data/bonus.py'))
+#             ),
+#         'bonus',
+#         ['main', 'bonus']
+#         )
 
-p.add_hidden_test(
-        TestFile(
-            py_runner(
-                os.path.join(problem_dir, 'make_data/bonus.py'))
-            ),
-        'bonus',
-        ['main', 'bonus']
-        )
-
+p.always_skip_test_gen = True
 def main():
     # p.run_cli()
 
