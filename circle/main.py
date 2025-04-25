@@ -25,7 +25,7 @@ problem = Problem(
     ]
 )
 
-problem.custom_checker = 'circle_compare'
+problem.custom_checker = 'circlecylinder_compare'
 solution = py_runner(problem_path / 'submissions/accepted/circle_bonus.py')
 
 validator_both = py_runner(os.path.join(problem_path, 'scripts/validator_both.py'))
