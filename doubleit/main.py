@@ -14,6 +14,7 @@ import os
 
 from calico_lib.multicase import TestCaseBase
 
+random.seed("or give it to the next person")
 p = Problem(
         'doubleit',
         os.path.dirname(__file__),
@@ -103,7 +104,6 @@ p.add_hidden_test(TestFile(cases), 'main_random')
 #     return TestFile(cases)
 
 def main():
-    random.seed("or give it to the next person")
     p.run_cli()
     # p.create_all_tests()
     # p.create_zip()
