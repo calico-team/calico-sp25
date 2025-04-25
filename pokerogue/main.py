@@ -19,6 +19,7 @@ MAXTURNS = 1000
 MAXHP = 1000000
 
 
+random.seed('pokepokeroguerogue')
 p = Problem(
         'pokerogue',
         problem_dir, # problem is in the same directory as the python source file
@@ -148,7 +149,6 @@ def main():
     # import resource
     # resource.setrlimit(resource.RLIMIT_STACK, (268435456, 268435456))
 
-    random.seed('pokepokeroguerogue')
     solution2.compile()
     p.init_problem()
     # p.create_all_tests()
