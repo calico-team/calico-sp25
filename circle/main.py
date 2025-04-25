@@ -64,7 +64,7 @@ class TestFile(TestFileBase):
             problem.print_test(case.rectangle.area())
 
 
-EPSILON = 10 ** -9
+EPSILON = 10 ** -5
 
 
 def equals_epsilon(a, b):
@@ -218,8 +218,8 @@ def main():
     problem.init_problem()
     problem.run_cli()
 
-    # p.create_all_tests()
-    # p.create_zip()
+    problem.create_all_tests()
+    problem.create_zip()
 
 if __name__ == '__main__':
     main()
