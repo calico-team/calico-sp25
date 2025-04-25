@@ -218,8 +218,8 @@ def main():
     problem.init_problem()
     problem.run_cli()
 
-    problem.create_all_tests()
-    problem.create_zip()
+    # problem.create_all_tests()
+    # problem.create_zip()
 
 if __name__ == '__main__':
     main()
