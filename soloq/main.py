@@ -19,6 +19,7 @@ from calico_lib.multicase import TestCaseBase
 
 problem_dir = os.path.dirname(__file__)
 
+random.seed('add_seed_600')
 p = Problem(
         'soloq',
         problem_dir, # problem is in the same directory as the python source file
@@ -115,7 +116,6 @@ def main():
     # resource.setrlimit(resource.RLIMIT_STACK, (268435456, 268435456))
 
     # TODO: set seed
-    random.seed('add_seed_600')
     solution2.compile()
     p.init_problem()
     # p.create_all_tests()
