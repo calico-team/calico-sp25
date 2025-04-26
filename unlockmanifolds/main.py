@@ -12,6 +12,8 @@ from typing import NamedTuple, override
 import random
 import os
 
+random.seed('ljksgdljkfljk;fgl;kjl;jgsd')
+
 problem_dir = os.path.dirname(__file__)
 
 p = Problem(
