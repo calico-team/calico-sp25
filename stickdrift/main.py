@@ -14,6 +14,7 @@ import os
 
 problem_dir = os.path.dirname(__file__)
 
+random.seed('tokyo drift~~')
 p = Problem(
         'stickdrift',
         os.path.dirname(__file__),
