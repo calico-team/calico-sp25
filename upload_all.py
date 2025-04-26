@@ -54,6 +54,8 @@ all_problems = [
 all_branch = all_problems
 all_branch.remove('kumi')
 all_branch.remove('circle')
+# skip_until = None
+skip_until = 'stableblocks'
 
 import os
 import sys
@@ -64,6 +66,7 @@ def check_branch_up_to_date(branch: str):
     return len(diff) == 0
 
 def main():
+    global skip_until
     subprocess.run(['git', 'fetch'], check=True)
     merged_branch = subprocess.check_output(['git', 'branch', '--merged']).decode().split('\n')
 
@@ -88,12 +91,16 @@ def main():
 
     print(f'All branch up to date and merged, uploading to contest {CONTEST_ID}.')
     assert len(sys.argv) >= 2 and ':' in sys.argv[1], "Supply username:password"
-    i = 1
+    i = 0
     for p in all_problems:
+        i = i + 1
+        if p == skip_until:
+            skip_until = None
+        if skip_until is not None:
+            continue
         os.chdir(p)
         subprocess.run(['python', 'main.py', '-f', f'{CONTEST_ID}', '-i', f'{i}', '-a', sys.argv[1]] + sys.argv[2:], check=True)
         os.chdir('..')
-        i = i + 1
 
 
 main()
