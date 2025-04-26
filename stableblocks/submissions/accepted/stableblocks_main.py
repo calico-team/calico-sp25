@@ -25,10 +25,6 @@ def solve(N: int, X0: list[int], Y0: list[int], X1: list[int], Y1: list[int]) ->
     
     @cache
     def center_of_mass_of_block(i):
-        try:
-            return (X0[i] + X1[i]) / 2, (Y0[i] + Y1[i]) / 2
-        except:
-            print(i, file=sys.stderr)
         return (X0[i] + X1[i]) / 2, (Y0[i] + Y1[i]) / 2
     
     @cache
