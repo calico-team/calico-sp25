@@ -133,7 +133,7 @@ p.add_hidden_test(TestFile(cases), 'secret_02_main_edgeLine')
 cases = []
 
 # Python program to create a spiral matrix from given array
-#Credit to https://www.geeksforgeeks.org/form-a-spiral-matrix-from-the-given-array/
+#Credit to  
 
 def spiralFill(n, m, arr):
     res = [[-1] * m for _ in range(n)]
