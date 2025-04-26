@@ -17,7 +17,7 @@ problem_dir = os.path.dirname(__file__)
 
 MAXTURNS = 1000
 MAXHP = 1000000
-MAXN = 10000
+MAXN = 50000
 
 
 random.seed('pokepokeroguerogue')
@@ -67,7 +67,6 @@ class TestFile(TestFileBase):
     @override
     def write_test_out(self, infile: str):
         p.print_test(solution2.exec_file(infile))
-
 # adds to all subproblems by default
 p.add_sample_test(TestFile([
     TestCase(4,1,[7,2,3,8],[1,2,3,4],[5,4,6,29],[1,2,3,14]),

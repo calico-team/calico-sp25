@@ -13,7 +13,7 @@ def solve(N: int, K: int, A: list[int], B: list[int], C: list[int], D: list[int]
     D: list containing the turns it takes to beat each stage if it were a doubles battle
     """
     # YOUR CODE HERE
-    assert 1 <= K <= N <= 100000
+    assert 1 <= K <= N <= 50000
     assert len(A) == len(B) == len(C) == len(D) == N
     for a in A:
         assert 1 <= a <= MAXHP
