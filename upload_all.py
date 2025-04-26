@@ -78,10 +78,11 @@ def main():
         arg1.append(p)
         arg2.append(i)
 
-    # map(process_problem, arg1, arg2)
+    print(arg1, arg2)
+    [x for x in map(process_problem, arg1, arg2)]
 
-    with concurrent.futures.ProcessPoolExecutor() as exe:
-        exe.map(process_problem, arg1, arg2)
+    # with concurrent.futures.ProcessPoolExecutor() as exe:
+    #     exe.map(process_problem, arg1, arg2)
 
 
 main()
