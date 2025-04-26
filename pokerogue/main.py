@@ -27,6 +27,8 @@ p = Problem(
             Subproblem('main', rank=3, time_limit=4),
             ])
 
+p.custom_checker = 'pachinko_compare'
+
 class TestCase(NamedTuple):
     N: int
     K: int
