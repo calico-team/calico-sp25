@@ -23,6 +23,7 @@ p = Problem(
         problem_dir, # problem is in the same directory as the python source file
         test_sets=[
             Subproblem('main', rank=2),
+            Subproblem('bonus', rank=2),
             ])
 
 solution = cpp_runner(path.join(problem_dir, 'submissions/accepted/solution.cpp'), path.join(problem_dir, 'sol.bin'))
@@ -42,6 +43,12 @@ class TestFile(TestFileBase):
     @override
     def validate_test_in(self, infile: str):
         """Verify the test using an external validator."""
+        assert len(self.cases) <= 100
+        for s in self.cases:
+            if 'main' in self.subproblems:
+                assert len(s) <= 100
+            assert len(s) <= int(1e5 - 1)
+
         # validator1.exec_file(infile)
 
     @override
@@ -59,16 +66,19 @@ import string
 MAX_N = 1000
 
 # more ways to add test cases
-@p.hidden_test_generator(test_count=1)
-def pure_random() -> TestFile:
-    test = TestFile([])
-    for i in range(10):
-        test.cases.append(''.join(random.choice(string.ascii_lowercase) for i in range(MAX_N)))
-    for i in range(10):
-        test.cases.append(''.join(random.choice('ooouuuuwwxyz') for i in range(MAX_N)))
-    for i in range(10):
-        test.cases.append(''.join(random.choice('o'*100+'w') for i in range(MAX_N)))
-    return test
+def random_case(max_n, char_set):
+    def inner():
+        test = TestFile([])
+        for _ in range(100):
+            test.cases.append(''.join(random.choice(char_set) for i in range(max_n)))
+        return test
+    return inner
+
+for i in [(100, ['main', 'bonus']), (int(1e5-1), ['bonus'])]:
+    p.add_hidden_test(random_case(i[0], string.ascii_lowercase), 'pure_random', subproblems=i[1])
+    p.add_hidden_test(random_case(i[0], 'ooouuuuwwxyz'), 'pure_random', subproblems=i[1])
+    p.add_hidden_test(random_case(i[0], 'o'*100+'w'), 'pure_random', subproblems=i[1])
+    p.add_hidden_test(random_case(i[0], 'o'*50 + 'u'*50 +'wwx'), 'pure_random', subproblems=i[1])
 
 def main():
     # increase stack size for running solutions using heaving recursion
