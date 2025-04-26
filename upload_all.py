@@ -44,33 +44,43 @@ all_problems = [
     'unlockmanifolds',
     'miku',
     'stableblocks',
-    # 'stickdrift',
-    # 'kumi',
-    # 'gates',
-    # 'pokerogue',
-    # 'cylinder',
-    # 'soloq',
+    'stickdrift',
+    'kumi',
+    'gates',
+    'pokerogue',
+    'cylinder',
+    'soloq',
     ]
 all_branch = all_problems
-# all_branch.remove('kumi')
+all_branch.remove('kumi')
 all_branch.remove('circle')
 
 import os
 import sys
+import subprocess
+
+def check_branch_up_to_date(branch: str):
+    diff = subprocess.check_output(['git', 'diff', f'origin/{branch}', branch, '--']).decode()
+    return len(diff) == 0
+
 def main():
-    import subprocess
     subprocess.run(['git', 'fetch'], check=True)
     merged_branch = subprocess.check_output(['git', 'branch', '--merged']).decode().split('\n')
 
     merged_branch = [s.strip('*').strip(' ') for s in merged_branch]
     e = False
+
+    if not check_branch_up_to_date('main'):
+        print('main not up to date with origin!')
+        e = True
+
     for p in all_problems:
-        origin_diff = subprocess.check_output(['git', 'diff', f'origin/{p}', p, '--']).decode()
         if p not in merged_branch:
             print(f'{p} not merged!')
             e = True
-        if len(origin_diff) > 0:
+        if not check_branch_up_to_date(p):
             print(f'{p} not up to date with origin!')
+            e = True
     if e:
         return
     return
