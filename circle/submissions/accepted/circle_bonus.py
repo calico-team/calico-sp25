@@ -32,8 +32,8 @@ class Line:
         self.b = b / norm
         self.c = c / norm
     
-    def signed_distance_to_point(self, point):
-        return self.a * point[0] + self.b * point[1] + self.c
+    def signed_distance_to_point(self, p):
+        return self.a * p[0] + self.b * p[1] + self.c
     
     def __eq__(self, other):
         return equals_epsilon(self.a, other.a) and equals_epsilon(self.b, other.b) and equals_epsilon(self.c, other.c)
