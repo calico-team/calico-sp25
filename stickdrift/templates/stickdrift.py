@@ -15,7 +15,7 @@ def main():
     T = int(input())
     for _ in range(T):
         N, M = map(int, input().split())
-        S =  input().split()
+        S =  input().strip()
         G = []
         for _ in range(N):
             row = list(map(int, input().split()))
