@@ -24,7 +24,7 @@ p = Problem(
         'pokerogue',
         problem_dir, # problem is in the same directory as the python source file
         test_sets=[
-            Subproblem('main', rank=3),
+            Subproblem('main', rank=3, time_limit=4),
             ])
 
 class TestCase(NamedTuple):
