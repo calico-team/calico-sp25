@@ -1,0 +1,100 @@
+- id: asfjdjlkdsfaljdsas
+  label: '32910392'
+  # color: antiquewhite
+  rgb: '#e9e4d7'
+# - id: vector_final_main
+#   label: '10'
+#   letter: '10'
+#   name: vector_final_main
+#   color: black
+#   rgb: '#000000'
+# - id: torreznos_final_main
+#   label: '11'
+#   letter: '11'
+#   name: torreznos_final_main
+#   color: black
+#   rgb: '#000000'
+# - id: caliconstruction_final_main
+#   label: '2'
+#   letter: '2'
+#   name: caliconstruction_final_main
+#   color: antiquewhite
+#   rgb: '#e9e4d7'
+# - id: scv_final_main
+#   label: '3'
+#   letter: '3'
+#   name: scv_final_main
+#   color: antiquewhite
+#   rgb: '#e9e4d7'
+# - id: fortnite_final_main
+#   label: '4'
+#   letter: '4'
+#   name: '*fortnite_final_main'
+#   color: coral
+#   rgb: '#ff7e34'
+# - id: bridge_final_main
+#   label: '5'
+#   letter: '5'
+#   name: bridge_final_main
+#   color: coral
+#   rgb: '#ff7e34'
+# - id: bridge_final_bonus
+#   label: 5b1
+#   letter: 5b1
+#   name: bridge_final_bonus
+#   color: coral
+#   rgb: '#ff7e34'
+# - id: literally1984_final_main
+#   label: '6'
+#   letter: '6'
+#   name: '*literally1984_final_main'
+#   color: coral
+#   rgb: '#ff7e34'
+# - id: literally1984_final_bonus_1
+#   label: 6b1
+#   letter: 6b1
+#   name: '*literally1984_final_bonus_1'
+#   color: coral
+#   rgb: '#ff7e34'
+# - id: literally1984_final_bonus_2
+#   label: 6b2
+#   letter: 6b2
+#   name: '*literally1984_final_bonus_2'
+#   color: indianred
+#   rgb: '#995d59'
+# - id: reservoir_final_main
+#   label: '7'
+#   letter: '7'
+#   name: reservoir_final_main
+#   color: coral
+#   rgb: '#ff7e34'
+# - id: reservoir_final_bonus
+#   label: 7b1
+#   letter: 7b1
+#   name: reservoir_final_bonus
+#   color: indianred
+#   rgb: '#995d59'
+# - id: celeste_final_main
+#   label: '8'
+#   letter: '8'
+#   name: '*celeste_final_main'
+#   color: indianred
+#   rgb: '#995d59'
+# - id: celeste_final_bonus
+#   label: 8b1
+#   letter: 8b1
+#   name: '*celeste_final_bonus'
+#   color: indianred
+#   rgb: '#995d59'
+# - id: explorer_final_main
+#   label: '9'
+#   letter: '9'
+#   name: explorer_final_main
+#   color: indianred
+#   rgb: '#995d59'
+# - id: explorer_final_bonus
+#   label: 9b1
+#   letter: 9b1
+#   name: explorer_final_bonus
+#   color: indianred
+#   rgb: '#995d59'
