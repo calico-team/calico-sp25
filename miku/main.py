@@ -58,7 +58,9 @@ class TestFile(TestFileBase):
 # adds to all subproblems by default
 p.add_sample_test(TestFile([
     "owwo",
-    "oyowuoxuwo"
+    "oyowuoxuwo",
+    "ouwou",
+    "wouououw"
 ]))
 
 import string
