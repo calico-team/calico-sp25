@@ -57,10 +57,10 @@ class TestFile(TestFileBase):
 
 # adds to all subproblems by default
 p.add_sample_test(TestFile([
-    "owwo",
-    "oyowuoxuwo",
-    "ouwou",
-    "wouououw"
+    "uwwu",
+    "uyuwuuxuwu",
+    "uuwuu",
+    "wwuuouw"
 ]))
 
 import string
@@ -78,10 +78,10 @@ def random_case(max_n, char_set):
 
 for i in [(100, ['main', 'bonus']), (int(1e5-1), ['bonus'])]:
     p.add_hidden_test(random_case(i[0], string.ascii_lowercase), 'pure_random', subproblems=i[1])
-    p.add_hidden_test(random_case(i[0], 'ooouuuuwwxyz'), 'pure_random', subproblems=i[1])
-    p.add_hidden_test(random_case(i[0], 'o'*100+'w'), 'pure_random', subproblems=i[1])
-    p.add_hidden_test(random_case(i[0], 'o'*1000+'w'), 'pure_random', subproblems=i[1])
-    p.add_hidden_test(random_case(i[0], 'o'*50 + 'u'*50 +'wwx'), 'pure_random', subproblems=i[1])
+    p.add_hidden_test(random_case(i[0], 'uuouuuuwwxyz'), 'pure_random', subproblems=i[1])
+    p.add_hidden_test(random_case(i[0], 'u'*100+'w'), 'pure_random', subproblems=i[1])
+    p.add_hidden_test(random_case(i[0], 'u'*1000+'w'), 'pure_random', subproblems=i[1])
+    p.add_hidden_test(random_case(i[0], 'u'*50 + 'u'*50 +'wwx'), 'pure_random', subproblems=i[1])
 
 def main():
     # increase stack size for running solutions using heaving recursion
