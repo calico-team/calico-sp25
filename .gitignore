@@ -1,9 +1,9 @@
 # This file is the sum of the Python, Java, and C++ gitignores by GitHub
 # with a few extras
 
-# Generated stuff
-*.zip
-data/
+# Generated stuf
+# *.zip
+# data/
 
 # For Chris
 .DS_Store
