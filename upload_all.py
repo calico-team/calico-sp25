@@ -83,13 +83,15 @@ def main():
             e = True
     if e:
         return
-    return
 
+    CONTEST_ID = 35
+
+    print(f'All branch up to date and merged, uploading to contest {CONTEST_ID}.')
     assert len(sys.argv) >= 2 and ':' in sys.argv[1], "Supply username:password"
     i = 1
     for p in all_problems:
         os.chdir(p)
-        subprocess.run(['python', 'main.py', '-f', '35', '-i', f'{i}', '-a', sys.argv[1]] + sys.argv[2:], check=True)
+        subprocess.run(['python', 'main.py', '-f', f'{CONTEST_ID}', '-i', f'{i}', '-a', sys.argv[1]] + sys.argv[2:], check=True)
         os.chdir('..')
         i = i + 1
 
