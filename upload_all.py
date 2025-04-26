@@ -1,42 +1,5 @@
 #!/usr/bin/env python
 
-# from calico_lib import 
-# from circle.main import problem as circle
-# circle.create_all_tests()
-# circle.create_zip()
-#
-# from doubleit.main import p as doubleit
-# doubleit.create_all_tests()
-# doubleit.create_zip()
-#
-# from kumi.main import p as kumi
-# kumi.create_all_tests()
-# kumi.create_zip()
-#
-# from miku.main import p as miku
-# miku.create_all_tests()
-# miku.create_zip()
-#
-# from pokerogue.main import p as pokerogue
-# pokerogue.create_all_tests()
-# pokerogue.create_zip()
-#
-# from soloq.main import p as soloq
-# soloq.create_all_tests()
-# soloq.create_zip()
-#
-# from stableblocks.main import p as stableblocks
-# stableblocks.create_all_tests()
-# stableblocks.create_zip()
-#
-# from stickdrift.main import p as stickdrift
-# stickdrift.create_all_tests()
-# stickdrift.create_zip()
-#
-# from tournament.main import p as tournament
-# tournament.create_all_tests()
-# tournament.create_zip()
-
 all_problems = [
     'doubleit',
     'circle',
@@ -63,10 +26,18 @@ skip_problems = ['cylinder']
 import os
 import sys
 import subprocess
+import concurrent.futures
 
 def check_branch_up_to_date(branch: str):
     diff = subprocess.check_output(['git', 'diff', f'origin/{branch}', branch, '--']).decode()
     return len(diff) == 0
+
+def process_problem(p, i):
+    print(f"\n>> Running command for problem {i}, {p}")
+    os.chdir(p)
+    # subprocess.run(['python', 'main.py', '-f', f'{CONTEST_ID}', '-i', f'{i}', '-a', sys.argv[1]] + sys.argv[2:], check=True)
+    subprocess.run(['python', 'main.py', '-i', f'{i}'] + sys.argv[1:], check=True)
+    os.chdir('..')
 
 def main():
     global skip_until
@@ -94,6 +65,9 @@ def main():
 
     print(f'All branch up to date and merged, running commands for each problem.')
     i = 0
+
+    arg1 = []
+    arg2 = []
     for p in all_problems:
         i = i + 1
         if p == skip_until:
@@ -101,11 +75,14 @@ def main():
         if skip_until is not None or p in skip_problems:
             print(f"\n>> Skipping problem {i}, {p}")
             continue
-        print(f"\n>> Running command for problem {i}, {p}")
-        os.chdir(p)
-        # subprocess.run(['python', 'main.py', '-f', f'{CONTEST_ID}', '-i', f'{i}', '-a', sys.argv[1]] + sys.argv[2:], check=True)
-        subprocess.run(['python', 'main.py', '-i', f'{i}'] + sys.argv[1:], check=True)
-        os.chdir('..')
+        arg1.append(p)
+        arg2.append(i)
+
+    print(arg1, arg2)
+    [x for x in map(process_problem, arg1, arg2)]
+
+    # with concurrent.futures.ProcessPoolExecutor() as exe:
+    #     exe.map(process_problem, arg1, arg2)
 
 
 main()
