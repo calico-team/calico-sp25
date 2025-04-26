@@ -17,6 +17,7 @@ problem_dir = os.path.dirname(__file__)
 
 MAXTURNS = 1000
 MAXHP = 1000000
+MAXN = 10000
 
 
 random.seed('pokepokeroguerogue')
@@ -111,14 +112,14 @@ def random_case_small_answer(N: int):
 def random_test_file(fun):
     total_N = 0
     cases = []
-    while len(cases) < 10 and total_N < 100000:
-        N = random.randint(1, 100000 - total_N)
+    while len(cases) < 10 and total_N < MAXN:
+        N = random.randint(1, MAXN - total_N)
         total_N += N
         cases.append(fun(N))
     return TestFile(cases)
 
 def big_test_file(fun):
-    return TestFile([fun(random.randint(90000, 100000))])
+    return TestFile([fun(random.randint(MAXN * 99 // 100, MAXN))])
 
 for _ in range(3):
     p.add_hidden_test(random_test_file(random_case), 'random_small_cases')
