@@ -4,13 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 class Solution {
-    /**
-     * Return a single string of the champion's name
-     *
-     * N: The length of C and P
-     * C: List of strings of the competitors
-     * P: List of integers of competitor's power
-     */
     static String solve(int N, String[] C, Integer[] P) {
         return helper(Arrays.asList(C), Arrays.asList(P));
     }

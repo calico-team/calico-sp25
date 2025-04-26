@@ -26,13 +26,6 @@ string helper(const vector<string>& C, const vector<int>& P) {
 }
 
 string solve(int N, const vector<string>& C, const vector<int>& P) {
-    /**
-     * Return a single string of the champion's name
-     *
-     * N: The length of C and P
-     * C: List of strings of the competitors
-     * P: List of integers of competitor's power
-     */
     return helper(C, P);
 }
 
