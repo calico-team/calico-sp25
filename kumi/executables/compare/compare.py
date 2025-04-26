@@ -27,8 +27,11 @@ def compare(test_in, test_out):
         # Read solution from the contestant
         contestant_solution = read()
         for x in contestant_solution:
-            if x not in string.ascii_lowercase:
+            if x not in 'uw':
                 print(f'Test #{case}: unexpected character "{x}"')
+
+        if len(contestant_solution) <= 1e5:
+            print(f'Test #{case}: contestant solution')
 
         x = solve(contestant_solution)
         if (x != judge_solution):
