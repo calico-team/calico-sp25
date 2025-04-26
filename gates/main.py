@@ -80,8 +80,8 @@ p.add_hidden_test(TestFile(cases), 'small')
 @p.hidden_test_generator(test_count=4)
 def pure_random() -> TestFile:
     test = TestFile([])
-    for i in range(2):
-        n = random.randint(400, 500)
+    for i in range(1):
+        n = random.randint(950, 1000)
         lst = []
         for j in range(n):
             lst.append(random.randint(0, 1))
