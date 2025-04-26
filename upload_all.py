@@ -48,14 +48,17 @@ all_problems = [
     'kumi',
     'gates',
     'pokerogue',
-    # 'cylinder',
-    # 'soloq',
+    'cylinder',
+    'soloq',
     ]
 all_branch = all_problems[:]
 all_branch.remove('kumi')
 all_branch.remove('circle')
+
 skip_until = None
 # skip_until = 'cylinder'
+
+skip_problems = ['cylinder']
 
 import os
 import sys
@@ -93,11 +96,12 @@ def main():
     i = 0
     for p in all_problems:
         i = i + 1
-        print(f"\n>> Running command for problem {i}, {p}")
         if p == skip_until:
             skip_until = None
-        if skip_until is not None:
+        if skip_until is not None or p in skip_problems:
+            print(f"\n>> Skipping problem {i}, {p}")
             continue
+        print(f"\n>> Running command for problem {i}, {p}")
         os.chdir(p)
         # subprocess.run(['python', 'main.py', '-f', f'{CONTEST_ID}', '-i', f'{i}', '-a', sys.argv[1]] + sys.argv[2:], check=True)
         subprocess.run(['python', 'main.py', '-i', f'{i}'] + sys.argv[1:], check=True)
