@@ -14,7 +14,7 @@ solution sketch:
 T = int(input())
 for _ in range(T):
     N = int(input())
-    if N < 900000:
+    if N < 90000:
         print('uw' + 'u' * N)
         continue
 
