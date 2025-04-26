@@ -25,7 +25,7 @@ problem = Problem(
     ]
 )
 
-problem.custom_checker = 'circle_compare'
+problem.custom_checker = 'circlecylinder_compare'
 solution = py_runner(problem_path / 'submissions/accepted/circle_bonus.py')
 
 validator_both = py_runner(os.path.join(problem_path, 'scripts/validator_both.py'))
@@ -134,9 +134,9 @@ problem.add_sample_test(TestFile(bonus_sample_test_cases), subproblems=['bonus']
 
 
 # main secret
-@problem.hidden_test_generator(test_count=5)
+@problem.hidden_test_generator(test_count=3)
 def pure_random() -> TestFile:
-    print('generating pure random hidden test for main')
+    print('generating random hidden test for main')
     test = TestFile([])
     for _ in range(100):
         valid = False
@@ -152,7 +152,43 @@ def pure_random() -> TestFile:
         test.cases.append(TestCase(r, points))
     return test
 
-@problem.hidden_test_generator(test_count=5)
+@problem.hidden_test_generator(test_count=3)
+def small() -> TestFile:
+    print('generating small hidden test for main')
+    test = TestFile([])
+    for _ in range(100):
+        valid = False
+        while not valid:
+            r = Rectangle(1.1, 1.1, (random.uniform(-500, 500), random.uniform(-500, 500)))
+            points = [r.sample_perimeter_point() for _ in range(random.randrange(15, 1001))]
+
+            try:
+                scripts.validator_both.solve(len(points), *list(zip(*points)))
+                valid = True
+            except Exception as e:
+                valid = False
+        test.cases.append(TestCase(r, points))
+    return test
+
+@problem.hidden_test_generator(test_count=3)
+def big() -> TestFile:
+    print('generating big hidden test for main')
+    test = TestFile([])
+    for _ in range(100):
+        valid = False
+        while not valid:
+            r = Rectangle(999.9, 999.9, (random.uniform(-500, 500), random.uniform(-500, 500)))
+            points = [r.sample_perimeter_point() for _ in range(random.randrange(15, 1001))]
+
+            try:
+                scripts.validator_both.solve(len(points), *list(zip(*points)))
+                valid = True
+            except Exception as e:
+                valid = False
+        test.cases.append(TestCase(r, points))
+    return test
+
+@problem.hidden_test_generator(test_count=3)
 def stress() -> TestFile:
     print('generating stress hidden test for main')
     test = TestFile([])
@@ -170,11 +206,10 @@ def stress() -> TestFile:
         test.cases.append(TestCase(r, points))
     return test
 
-
 # bonus secret
-@problem.hidden_test_generator(test_count=5, subproblems=['bonus'])
-def pure_random2() -> TestFile:
-    print('generating pure random hidden test for bonus')
+@problem.hidden_test_generator(test_count=3, subproblems=['bonus'])
+def pure_random() -> TestFile:
+    print('generating random hidden test for main')
     test = TestFile([])
     for _ in range(100):
         valid = False
@@ -190,21 +225,56 @@ def pure_random2() -> TestFile:
         test.cases.append(TestCase(r, points))
     return test
 
-@problem.hidden_test_generator(test_count=5, subproblems=['bonus'])
-def stress2() -> TestFile:
-    print('generating stress hidden test for bonus')
+@problem.hidden_test_generator(test_count=3, subproblems=['bonus'])
+def small() -> TestFile:
+    print('generating small hidden test for main')
+    test = TestFile([])
+    for _ in range(100):
+        valid = False
+        while not valid:
+            r = Rectangle(1.1, 1.1, (random.uniform(-500, 500), random.uniform(-500, 500)), random.uniform(0, 360))
+            points = [r.sample_perimeter_point() for _ in range(random.randrange(15, 1001))]
+
+            try:
+                scripts.validator_both.solve(len(points), *list(zip(*points)))
+                valid = True
+            except Exception as e:
+                valid = False
+        test.cases.append(TestCase(r, points))
+    return test
+
+@problem.hidden_test_generator(test_count=3, subproblems=['bonus'])
+def big() -> TestFile:
+    print('generating big hidden test for main')
+    test = TestFile([])
+    for _ in range(100):
+        valid = False
+        while not valid:
+            r = Rectangle(999.9, 999.9, (random.uniform(-500, 500), random.uniform(-500, 500)), random.uniform(0, 360))
+            points = [r.sample_perimeter_point() for _ in range(random.randrange(15, 1001))]
+
+            try:
+                scripts.validator_both.solve(len(points), *list(zip(*points)))
+                valid = True
+            except Exception as e:
+                valid = False
+        test.cases.append(TestCase(r, points))
+    return test
+
+@problem.hidden_test_generator(test_count=3, subproblems=['bonus'])
+def stress() -> TestFile:
+    print('generating stress hidden test for main')
     test = TestFile([])
     for _ in range(100):
         valid = False
         while not valid:
             r = Rectangle(random.uniform(1, 1000), random.uniform(1, 1000), (random.uniform(-500, 500), random.uniform(-500, 500)), random.uniform(0, 360))
             points = [r.sample_perimeter_point() for _ in range(1000)]
-            
+
             try:
                 scripts.validator_both.solve(len(points), *list(zip(*points)))
                 valid = True
             except Exception as e:
-                # print(e)
                 valid = False
         test.cases.append(TestCase(r, points))
     return test

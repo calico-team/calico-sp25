@@ -20,8 +20,7 @@ public class Main {
         int T = Integer.parseInt(in.readLine());
         for (int i = 0; i < T; i++) {
             int N = Integer.parseInt(in.readLine());
-            double[] X = new double[N];
-            double[] Y = new double[N];
+            double[] X = new double[N], Y = new double[N];
             for (int j = 0; j < N; j++) {
                 String[] XY = in.readLine().split(" ");
                 X[j] = Double.parseDouble(XY[0]);

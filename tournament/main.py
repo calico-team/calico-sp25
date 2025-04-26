@@ -31,7 +31,7 @@ class TestCase(NamedTuple):
 
 solution = py_runner(os.path.join(problem_dir, 'submissions/accepted/tournament.py'))
 #solution2 = cpp_runner(os.path.join(problem_dir, 'submissions/accepted/add_int.cpp'), 'add_int')
-#validator1 = py_runner(os.path.join(problem_dir, 'scripts/validator_main.py'))
+validator = py_runner(os.path.join(problem_dir, 'scripts/validator.py'))
 #validator2 = py_runner(os.path.join(problem_dir, 'scripts/validator.py'))
 
 class TestFile(TestFileBase):
@@ -57,9 +57,7 @@ class TestFile(TestFileBase):
     @override
     def validate_test_in(self, infile: str):
         """Verify the test using an external validator."""
-        #if 'main' in self.subproblems:
-        #    validator1.exec_file(infile)
-        #validator2.exec_file(infile)
+        validator.exec_file(infile)
 
     @override
     def write_test_out(self, infile: str):
@@ -141,7 +139,7 @@ def main():
 
     # TODO: set seed
     p.init_problem()
-    # p.create_all_tests()
+    p.create_all_tests()
     # p.create_zip()
     p.run_cli()
 

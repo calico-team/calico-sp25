@@ -14,8 +14,8 @@ solution sketch:
 T = int(input())
 for _ in range(T):
     N = int(input())
-    if N < 1000:
-        print('uw' + 'u' * N)
+    if N < 900000:
+        print('ow' + 'o' * N)
         continue
 
     m = 2
@@ -35,7 +35,7 @@ for _ in range(T):
 
     a = m-d*4-b*2
     # print(f"{d} 4s; {b} 2s; {a} 1s;")
-    print("uw"*a + "uuw"*b + "uuuuw"*d)
+    print("ow"*a + "oow"*b + "oooow"*d)
 
     # arr = [1]*a + [2]*b + [4]*d
     # total = 0

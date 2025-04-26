@@ -14,25 +14,20 @@ typedef long long ll;
 
 ll solve(string str) {
     int n = str.length();
-    int curw = -1, nxtw[n], sufo[n], sufu[n];
-    sufo[n - 1] = sufu[n - 1] = 0;
+    int curw = -1, nxtw[n], suf[n];
+    suf[n - 1] = 0;
     for (int i = n - 1; i >= 0; i--) {
         if (i != n - 1) {
-            sufo[i] = sufo[i + 1];
-            sufu[i] = sufu[i + 1];
+            suf[i] = suf[i + 1];
         }
         if (str[i] == 'w') curw = i;
-        if (str[i] == 'o') sufo[i]++;
-        if (str[i] == 'u') sufu[i]++;
+        if (str[i] == 'u') suf[i]++;
         nxtw[i] = curw;
     }
     ll ans = 0;
     for (int i = 0; i < n; i++) {
-        if (str[i] == 'o') {
-            if (nxtw[i] != -1) ans += sufo[nxtw[i]];
-        }
         if (str[i] == 'u') {
-            if (nxtw[i] != -1) ans += sufu[nxtw[i]];
+            if (nxtw[i] != -1) ans += suf[nxtw[i]];
         }
     }
     return ans;

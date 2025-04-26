@@ -1,11 +1,4 @@
 def solve(N: int, C: list, P: list) -> str:
-    """
-    Return a single string of the champion's name
-    
-    N: The length of C and P
-    C: List of strings of the competitors
-    P: List of integers of competitor's power
-    """
     def helper(number, competitors, powers):
         if (number == 1):
             return competitors[0]

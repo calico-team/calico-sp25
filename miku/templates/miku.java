@@ -1,12 +1,14 @@
 import java.io.*;
-import java.math.BigInteger;
 
 class Solution {
     /**
-     * Implements addition with Java's BigInteger class and string parsing.
+     * Return the number of subsequences of owo and uwu
+     * 
+     * S: string of characters
      */
-    static String solve(String A, String B) {
-        return new BigInteger(A).add(new BigInteger(B)).toString();
+    static int solve(String S) {
+        // YOUR CODE HERE
+        return -1;
     }
     
     static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -15,9 +17,8 @@ class Solution {
     public static void main(String[] args) throws IOException {
         int T = Integer.parseInt(in.readLine());
         for (int i = 0; i < T; i++) {
-            String[] temp = in.readLine().split(" ");
-            int A = Integer.parseInt(temp[0]), B = Integer.parseInt(temp[1]);
-            out.println(solve(A, B));
+            String S = in.readLine();
+            out.println(solve(S));
         }
         out.flush();
     }

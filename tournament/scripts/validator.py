@@ -1,21 +1,18 @@
-def solve(A: int, B: int) -> int:
-    """
-    Return the sum of A and B.
-    
-    A: a non-negative integer
-    B: another non-negative integer
-    """
-    assert 1 <= A <= 1e12
-    assert 1 <= B <= 1e12
-    return 0
+def solve(N: int, C: list, P: list) -> str:
+    assert 1 <= N <= 64
+    assert len(C) == len(set(C))
+    assert all(1 <= 10 ** 9 for p in P)
+    assert sum(P) <= 2 ** 31 - 1 # overflow protection
 
 
 def main():
     T = int(input())
-    assert T <= 100
+    assert 1 <= T <= 100
     for _ in range(T):
-        temp = input().split()
-        A, B = int(temp[0]), int(temp[1])
+        N = int(input())
+        C = input().split(" ")
+        P = list(map(lambda s: int(s), input().split(" ")))
+        print(solve(N, C, P))
 
 if __name__ == '__main__':
     main()
