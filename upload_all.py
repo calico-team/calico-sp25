@@ -43,8 +43,8 @@ all_problems = [
     'tournament',
     'unlockmanifolds',
     'miku',
-    'stableblocks',
     'stickdrift',
+    'stableblocks',
     'kumi',
     'gates',
     'pokerogue',
@@ -55,7 +55,7 @@ all_branch = all_problems
 all_branch.remove('kumi')
 all_branch.remove('circle')
 # skip_until = None
-skip_until = 'stableblocks'
+skip_until = 'cylinder'
 
 import os
 import sys
@@ -94,6 +94,7 @@ def main():
     i = 0
     for p in all_problems:
         i = i + 1
+        print(f"\n>> Uploading problem {i}, {p}")
         if p == skip_until:
             skip_until = None
         if skip_until is not None:
