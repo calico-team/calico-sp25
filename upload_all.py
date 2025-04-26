@@ -48,14 +48,14 @@ all_problems = [
     'kumi',
     'gates',
     'pokerogue',
-    'cylinder',
-    'soloq',
+    # 'cylinder',
+    # 'soloq',
     ]
-all_branch = all_problems
+all_branch = all_problems[:]
 all_branch.remove('kumi')
 all_branch.remove('circle')
-# skip_until = None
-skip_until = 'cylinder'
+skip_until = None
+# skip_until = 'cylinder'
 
 import os
 import sys
@@ -77,7 +77,7 @@ def main():
         print('main not up to date with origin!')
         e = True
 
-    for p in all_problems:
+    for p in all_branch:
         if p not in merged_branch:
             print(f'{p} not merged!')
             e = True
@@ -87,20 +87,20 @@ def main():
     if e:
         return
 
-    CONTEST_ID = 35
+    # CONTEST_ID = 35
 
-    print(f'All branch up to date and merged, uploading to contest {CONTEST_ID}.')
-    assert len(sys.argv) >= 2 and ':' in sys.argv[1], "Supply username:password"
+    print(f'All branch up to date and merged, running commands for each problem.')
     i = 0
     for p in all_problems:
         i = i + 1
-        print(f"\n>> Uploading problem {i}, {p}")
+        print(f"\n>> Running command for problem {i}, {p}")
         if p == skip_until:
             skip_until = None
         if skip_until is not None:
             continue
         os.chdir(p)
-        subprocess.run(['python', 'main.py', '-f', f'{CONTEST_ID}', '-i', f'{i}', '-a', sys.argv[1]] + sys.argv[2:], check=True)
+        # subprocess.run(['python', 'main.py', '-f', f'{CONTEST_ID}', '-i', f'{i}', '-a', sys.argv[1]] + sys.argv[2:], check=True)
+        subprocess.run(['python', 'main.py', '-i', f'{i}'] + sys.argv[1:], check=True)
         os.chdir('..')
 
 
