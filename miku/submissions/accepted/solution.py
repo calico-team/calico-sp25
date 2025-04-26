@@ -5,19 +5,15 @@ def solve(s: str) -> int:
     n = len(s)
     curw = -1
     nxtw = [-1] * n
-    sufo = [0] * n  # suffix count of 'o'
     sufu = [0] * n  # suffix count of 'u'
 
     # build suffix arrays and next-'w' indices
     for i in range(n - 1, -1, -1):
         if i < n - 1:
-            sufo[i] = sufo[i + 1]
             sufu[i] = sufu[i + 1]
 
         if s[i] == 'w':
             curw = i
-        elif s[i] == 'o':
-            sufo[i] += 1
         elif s[i] == 'u':
             sufu[i] += 1
 
@@ -28,9 +24,7 @@ def solve(s: str) -> int:
     for i, ch in enumerate(s):
         j = nxtw[i]
         if j != -1:
-            if ch == 'o':
-                ans += sufo[j]
-            elif ch == 'u':
+            if ch == 'u':
                 ans += sufu[j]
 
     return ans
