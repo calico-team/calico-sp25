@@ -82,18 +82,16 @@ def rotate_plane_points_to_xy_plane(points):
 
     a, b, c = plane.a, plane.b, plane.c
 
-    # If already aligned with z-axis
-    if abs(a) < 1e-8 and abs(b) < 1e-8 and (c > 0):
-        return [[1,0,0], [0,1,0], [0,0,1]]
-    if abs(a) < 1e-8 and abs(b) < 1e-8 and (c < 0):
-        # 180-degree rotation about x or y axis
-        return [[-1,0,0], [0,-1,0], [0,0,1]]
-
     # Rotation axis is cross product of (a,b,c) and (0,0,1)
     rx = b
     ry = -a
     rz = 0
     r_mag = math.sqrt(rx * rx + ry * ry)
+    
+    # ayo this shits alr rotated perfectly so we done
+    if r_mag == 0:
+        return points
+    
     rx /= r_mag
     ry /= r_mag
 
@@ -211,10 +209,7 @@ def main():
     T = int(input())
     for _ in range(T):
         N = int(input())
-        # X, Y, Z = zip(*(map(float, input().split()) for _ in range(N)))
-        X = list(map(float, input().split()))
-        Y = list(map(float, input().split()))
-        Z = list(map(float, input().split()))
+        X, Y, Z = zip(*(map(float, input().split()) for _ in range(N)))
         print(solve(N, X, Y, Z))
 
 
