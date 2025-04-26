@@ -18,7 +18,8 @@ p = Problem(
         'stickdrift',
         os.path.dirname(__file__),
         test_sets=[
-            Subproblem('main', rank=3),
+            Subproblem('main', rank=2),
+            Subproblem('bonus', rank=3),
             ])
 
 class TestCase(NamedTuple):
@@ -84,57 +85,9 @@ p.add_sample_test(TestFile([ #Todo actually make sample tests
     ]))
 
 letters = ["U", "D", "L", "R"]
-cases = []
-total = 0
-while (True):
-    N = random.randint(50, 200)
-    M = random.randint(50, 200)
-    if (total + (N * M) > 200000):
-        break
-    numbers = list(range(1, N * M + 1))
-    random.shuffle(numbers)
-    G = []
-    temp = []
-    count = 0
-    for num in numbers:
-        temp.append(num)
-        count += 1
-        if (count == M):
-            # print()
-            G.append(temp)
-            temp = []
-            count = 0
-    randSeq = [0, 1, 2, 3]
-    random.shuffle(randSeq)
-    S = ""
-    for i in randSeq:
-        S += letters[i]
-    cases.append(TestCase(N, M, S, G))
-    total += N * M
-
-p.add_hidden_test(TestFile(cases), 'secret_01_main_random')
-    
-cases = []
-temp = []
-for i in range(1, 100001):
-    temp.append(i)
-
-cases.append(TestCase(1, 100000, "L", [temp]))
-
-temp = []
-
-for i in range(1, 100001):
-    temp.append([i])
-
-cases.append(TestCase(100000, 1, "U", temp))
-
-p.add_hidden_test(TestFile(cases), 'secret_02_main_edgeLine')
-
-cases = []
 
 # Python program to create a spiral matrix from given array
-#Credit to  
-
+# Credit to https://www.geeksforgeeks.org/form-a-spiral-matrix-from-the-given-array/
 def spiralFill(n, m, arr):
     res = [[-1] * m for _ in range(n)]
 
@@ -173,6 +126,123 @@ def spiralFill(n, m, arr):
 
     return res
 
+#Main Tests
+
+cases = []
+total = 0
+while (True):
+    N = random.randint(5, 20)
+    M = random.randint(5, 20)
+    if (total + (N * M) > 1000):
+        break
+    numbers = list(range(1, N * M + 1))
+    random.shuffle(numbers)
+    G = []
+    temp = []
+    count = 0
+    for num in numbers:
+        temp.append(num)
+        count += 1
+        if (count == M):
+            # print()
+            G.append(temp)
+            temp = []
+            count = 0
+    randSeq = [0, 1, 2, 3]
+    random.shuffle(randSeq)
+    S = ""
+    for i in randSeq:
+        S += letters[i]
+    cases.append(TestCase(N, M, S, G))
+    total += N * M
+
+p.add_hidden_test(TestFile(cases), 'secret_01_main_random')
+
+cases = []
+temp = []
+for i in range(1, 501):
+    temp.append(i)
+
+cases.append(TestCase(1, 500, "L", [temp]))
+
+temp = []
+
+for i in range(1, 501):
+    temp.append([i])
+
+cases.append(TestCase(500, 1, "U", temp))
+
+p.add_hidden_test(TestFile(cases), 'secret_02_main_edgeLine')
+
+cases = []
+
+N = 30
+M = 30
+numbers = list(range(1, N * M + 1))
+temp = spiralFill(N, M, numbers)
+
+cases.append(TestCase(N, M, "UDLR", temp))
+
+N = 10
+M = 10
+numbers = list(range(1, N * M + 1))
+temp = spiralFill(N, M, numbers)
+
+cases.append(TestCase(N, M, "UDLR", temp))
+
+p.add_hidden_test(TestFile(cases), 'secret_03_main_edgeSpiral')
+
+#Bonus Tests
+
+
+total = 0
+cases = []
+while (True):
+    N = random.randint(50, 200)
+    M = random.randint(50, 200)
+    if (total + (N * M) > 200000):
+        break
+    numbers = list(range(1, N * M + 1))
+    random.shuffle(numbers)
+    G = []
+    temp = []
+    count = 0
+    for num in numbers:
+        temp.append(num)
+        count += 1
+        if (count == M):
+            # print()
+            G.append(temp)
+            temp = []
+            count = 0
+    randSeq = [0, 1, 2, 3]
+    random.shuffle(randSeq)
+    S = ""
+    for i in randSeq:
+        S += letters[i]
+    cases.append(TestCase(N, M, S, G))
+    total += N * M
+
+p.add_hidden_test(TestFile(cases), 'secret_01_bonus_random', ['bonus'])
+    
+cases = []
+temp = []
+for i in range(1, 100001):
+    temp.append(i)
+
+cases.append(TestCase(1, 100000, "L", [temp]))
+
+temp = []
+
+for i in range(1, 100001):
+    temp.append([i])
+
+cases.append(TestCase(100000, 1, "U", temp))
+
+p.add_hidden_test(TestFile(cases), 'secret_02_bonus_edgeLine', ['bonus'])
+
+cases = []
+
 N = 1000
 M = 100
 numbers = list(range(1, N * M + 1))
@@ -187,7 +257,7 @@ temp = spiralFill(N, M, numbers)
 
 cases.append(TestCase(N, M, "UDLR", temp))
 
-p.add_hidden_test(TestFile(cases), 'secret_03_main_edgeSpiral')
+p.add_hidden_test(TestFile(cases), 'secret_03_bonus_edgeSpiral', ['bonus'])
 
 # more ways to add test cases
 #@p.hidden_test_generator(test_count=4)
