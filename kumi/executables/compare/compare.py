@@ -30,8 +30,8 @@ def compare(test_in, test_out):
             if x not in 'uw':
                 print(f'Test #{case}: unexpected character "{x}"')
 
-        if len(contestant_solution) <= 1e5:
-            print(f'Test #{case}: contestant solution')
+        if len(contestant_solution) > 1e5:
+            print(f'Test #{case}: contestant solution longer than 1e5')
 
         x = solve(contestant_solution)
         if (x != judge_solution):
