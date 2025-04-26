@@ -16,10 +16,7 @@ def main():
     T = int(input())
     for _ in range(T):
         N = int(input())
-        corners = []
-        for _ in range(N):
-            corners.append(list(map(int, input().split())))
-        X0, Y0, X1, Y1 = zip(*corners)
+        X0, Y0, X1, Y1 = zip(*(map(int, input().split()) for _ in range(N)))
         if solve(N, X0, Y0, X1, Y1):
             print('Stable')
         else:

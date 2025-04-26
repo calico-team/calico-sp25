@@ -4,7 +4,6 @@ from functools import cache
 import sys
 
 
-
 def solve(N: int, X0: list[int], Y0: list[int], X1: list[int], Y1: list[int]) -> bool:    
     @cache
     def blocks_resting_on_block(i):
@@ -63,10 +62,7 @@ def main():
     T = int(input())
     for _ in range(T):
         N = int(input())
-        corners = []
-        for _ in range(N):
-            corners.append(list(map(int, input().split())))
-        X0, Y0, X1, Y1 = zip(*corners)
+        X0, Y0, X1, Y1 = zip(*(map(int, input().split()) for _ in range(N)))
         if solve(N, X0, Y0, X1, Y1):
             print('Stable')
         else:
