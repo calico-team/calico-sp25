@@ -27,16 +27,11 @@ int main() {
         vector<string> C(N);
         vector<int> P(N);
         string line;
-        getline(cin, line);
-        getline(cin, line);
-        stringstream ss1(line);
         for (int j = 0; j < N; ++j) {
-            ss1 >> C[j];
+            cin >> C[j];
         }
-        getline(cin, line);
-        stringstream ss2(line);
         for (int j = 0; j < N; ++j) {
-            ss2 >> P[j];
+            cin >> P[j];
         }
         cout << solve(N, C, P) << endl;
     }
