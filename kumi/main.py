@@ -22,7 +22,7 @@ p = Problem(
         'kumi',
         problem_dir, # problem is in the same directory as the python source file
         test_sets=[
-            Subproblem('main', rank=1),
+            Subproblem('main', rank=3),
             ])
 
 p.custom_checker = 'kumi_compare'

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os
 import random
 from collections.abc import Collection, Iterable

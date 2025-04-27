@@ -21,8 +21,8 @@ p = Problem(
         'stable_blocks',
         problem_dir, # problem is in the same directory as the python source file
         test_sets=[
-            Subproblem('main', rank=1),
-            Subproblem('bonus', rank=2)
+            Subproblem('main', rank=2),
+            Subproblem('bonus', rank=3)
                        # , time_limit=4, mem_limit=1_000_000_000),
             ])
 
