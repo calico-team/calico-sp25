@@ -28,6 +28,7 @@ int main() {
         vector<int> P(N);
         string line;
         getline(cin, line);
+        getline(cin, line);
         stringstream ss1(line);
         for (int j = 0; j < N; ++j) {
             ss1 >> C[j];
