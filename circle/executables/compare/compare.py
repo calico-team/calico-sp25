@@ -40,14 +40,13 @@ def compare(test_in, test_out):
             except ValueError:
                 print(f'Test #{case}: Contestant does not print a floating point number')
             
-            absolute_error = abs(judge_solution - contestant_solution)
-            relative_error = abs((judge_solution - contestant_solution) / judge_solution)
-            
-            within_tolerable_error = absolute_error <= EPS or relative_error <= EPS
-            
-            if keep_judging and not within_tolerable_error:
-                print(f'Test #{case}: Contestant solution and judge solution '
-                      f'differ by {contestant_solution - judge_solution}. This exceeds the maximum allowed absolute or relative error of {EPS}')
+            if keep_judging:
+                absolute_error = abs(judge_solution - contestant_solution)
+                relative_error = abs((judge_solution - contestant_solution) / judge_solution)
+                
+                within_tolerable_error = absolute_error <= EPS or relative_error <= EPS
+                if not within_tolerable_error:
+                    print(f'Test #{case}: Contestant solution and judge solution differ by {contestant_solution - judge_solution}. This exceeds the maximum allowed absolute or relative error of {EPS}')
 
     try:
         temp = ''
