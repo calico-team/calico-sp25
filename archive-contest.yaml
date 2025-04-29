@@ -1,0 +1,8 @@
+id: calico-sp25-archive
+name: "[Archive] CALICO Spring '25"
+start_time: '2025-04-26T20:00:00-07:00'
+duration: '999999:00:00'
+penalty_time: 10
+activate_time: '2025-04-26T15:10:00-07:00'
+# scoreboard_freeze_time: '+02:00:00'
+# scoreboard_freeze_duration: '1:00:00'
